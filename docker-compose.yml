@@ -1,0 +1,167 @@
+services:
+  # Nginx Service
+  nginx:
+    container_name: "nginx"
+    build:
+        context: ./
+        dockerfile: dockerfiles/nginx.dockerfile
+        args:
+            - UID=${UID:-1000}
+            - GID=${GID:-1000}
+    ports:
+        - "${FORWARD_NGINX_PORT:-80}:80"
+    volumes:
+        - ./backend:/var/www/html:delegated
+    networks:
+        - laravel
+    restart: unless-stopped
+
+  # PHP-FPM Service (PHP 8.2)
+  php:
+      image: php:8.2-fpm
+      container_name: php
+      build:
+          context: ./
+          dockerfile: dockerfiles/php.dockerfile
+          args:
+              - UID=${UID:-1000}
+              - GID=${GID:-1000}
+      ports:
+          - "${FORWARD_PHP_PORT:-9000}:9000"
+      volumes:
+          - ./backend:/var/www/html:delegated
+          - ./dockerfiles/configs/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      networks:
+          - laravel
+      restart: unless-stopped
+
+
+  # PostgreSQL Service
+  postgresql:
+      image: postgres:latest
+      container_name: archly-db
+      environment:
+        POSTGRES_DB: ${DB_DATABASE}
+        POSTGRES_USER: ${DB_USERNAME}
+        POSTGRES_PASSWORD: ${DB_PASSWORD}
+      healthcheck:
+        test: [ "CMD-SHELL", "pg_isready -d ${DB_DATABASE} -U ${DB_USERNAME}" ]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+      depends_on:
+        - php
+      volumes:
+        - postgresql:/var/lib/postgresql/data
+      ports:
+        - "${FORWARD_DB_PORT:-5432}:5432"
+      networks:
+        - laravel
+      restart: unless-stopped
+
+
+  pgadmin:
+      image: dpage/pgadmin4
+      container_name: pgadmin
+      environment:
+        PGADMIN_DEFAULT_EMAIL: homestead@mail.com
+        PGADMIN_DEFAULT_PASSWORD: secret
+      volumes:
+        - pgadmin:/var/lib/pgadmin
+      ports:
+        - "${FORWARD_PGADMIN_PORT:-8090}:80"
+      depends_on:
+        postgresql:
+          condition: service_healthy
+      networks:
+        - laravel
+      restart: unless-stopped
+
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    ports:
+      - "${FORWARD_ADMINER_PORT:-8091}:80"
+    environment:
+      ADMINER_DEFAULT_DB_DRIVER: pgsql
+      ADMINER_DEFAULT_SERVER: postgresql
+      ADMINER_DEFAULT_DB_NAME: ${DB_DATABASE}
+    depends_on:
+      - postgresql
+    networks:
+      - laravel
+    restart: unless-stopped
+
+
+  redis:
+      container_name: redis
+      image: redis:alpine
+      ports:
+          - "${FORWARD_REDIS_PORT:-6379}:6379"
+      volumes:
+          - redis:/data
+      healthcheck:
+          test: ["CMD", "redis-cli", "ping"]
+          retries: 3
+          timeout: 5s
+      networks:
+          - laravel
+      restart: unless-stopped
+
+
+  # Backend Service (Laravel)
+  archly-backend:
+    build:
+      context: ./
+      dockerfile: dockerfiles/backend.dockerfile
+    container_name: archly-backend
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - postgresql
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=pgsql
+      - DB_HOST=archly-db
+      - DB_PORT=${FORWARD_DB_PORT}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./backend:/var/www/html
+    networks:
+      - laravel
+    # command: sh -c "php artisan migrate"
+
+
+  # Frontend Service (Next.js)
+  archly-frontend:
+    build:
+      context: ./
+      dockerfile: dockerfiles/frontend.dockerfile
+    container_name: archly-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://archly.local/api
+    volumes:
+      - ./frontend:/app
+    networks:
+      - laravel
+
+
+volumes:
+  postgresql:
+    driver: local
+  pgadmin:
+    driver: local
+  redis:
+    driver: local
+
+
+networks:
+  laravel:
+    driver: bridge
