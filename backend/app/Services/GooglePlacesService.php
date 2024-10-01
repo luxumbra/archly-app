@@ -43,23 +43,15 @@ class GooglePlacesService
         }
     }
 
-    public function placeDetails($placeId, $fields = 'places.displayName,places.formattedAddress, places.id')
+    public function getPlaceDetails($placeId, $fields = 'displayName,formattedAddress,id')
     {
         try {
-            $requestBody = [
-                'place_id' => $placeId,
-            ];
-
             $response = $this->client->get("{$this->endpoint}places/{$placeId}", [
-                'query' => [
-                    'fields' => $fields
-                ],
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'X-Goog-Api-Key' => $this->apiKey,
                     'X-Goog-FieldMask' => $fields,
                 ],
-                'json' => $requestBody,
             ]);
 
             return json_decode($response->getBody()->getContents(), true);
@@ -68,7 +60,7 @@ class GooglePlacesService
         }
     }
 
-    public function getNearbyPlaces($location, $radius = 5000, $fields = 'places.displayName,places.formattedAddress')
+    public function getNearbyPlaces($location, $radius = 5000, $fields = 'displayName,formattedAddress,id')
     {
         try {
             $requestBody = [

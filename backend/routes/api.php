@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlacesController;
+use App\Http\Controllers\WikipediaController;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
@@ -21,4 +22,12 @@ Route::prefix('places')->group(function () {
     Route::get('/nearby', [PlacesController::class, 'nearbySearch']);
 });
 
+Route::prefix('wikipedia')->group(function () {
+    Route::prefix('page')->group(function () {
+        // Route for getting wikipedia entry for a given place
+        Route::get('/html', [WikipediaController::class, 'placeWikiPageHtml']);
 
+        Route::get('/media', [WikipediaController::class, 'placeWikiPageMedia']);
+
+    });
+});

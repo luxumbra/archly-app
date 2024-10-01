@@ -29,10 +29,10 @@ class PlacesController extends Controller
     // Get details of a place using the place_id
     public function placeDetails(Request $request)
     {
-        $placeId = $request->input('place_id');
-        $fields = $request->input('fields', 'displayName,formattedAddress, id'); // Default fields
+        $placeId = $request->query('place_id');
+        $fields = $request->query('fields');
 
-        $response = $this->googlePlacesService->placeDetails($placeId, $fields);
+        $response = $this->googlePlacesService->getPlaceDetails($placeId, $fields);
 
         return response()->json($response);
     }
