@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Redis;
 use GuzzleHttp\Client;
 
 class WikipediaService
@@ -17,8 +17,14 @@ class WikipediaService
         $this->apiUA = 'Please contact dave@foresite.rocks';
     }
 
-    public function getPlaceWikiPageHtml($query)
+    public function getPlaceWikiPageHtml($query, $noCache = false)
     {
+        $cacheKey = "wiki_cache:{$query}";
+
+        if (Redis::exists($cacheKey) && !$noCache) {
+            return json_decode(Redis::get($cacheKey), true);
+        }
+
         try {
 
             $response = $this->client->get("{$this->endpoint}/html/{$query}", [
@@ -61,19 +67,28 @@ class WikipediaService
                 $paragraphsHTML[] = getInnerHtml($paragraph);
             }
 
-            return response()->json([
+            $data = response()->json([
                 'title' => $title,
                 'contentHTML' => $paragraphsHTML,
                 'contentText' => $paragraphTexts
             ]);
+
+            Redis::setex($cacheKey, 43200, json_encode($data));
+
+            return $data;
 
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];
         }
     }
 
-    public function getPlaceWikiPageMedia($query)
+    public function getPlaceWikiPageMedia($query, $noCache = false)
     {
+        $cacheKey = "wikimedia_cache:{$query}";
+
+        if (Redis::exists($cacheKey) && !$noCache) {
+            return json_decode(Redis::get($cacheKey), true);
+        }
         try {
 
             $response = $this->client->get("{$this->endpoint}/media-list/{$query}", [
@@ -86,7 +101,10 @@ class WikipediaService
                 ],
             ]);
 
-            return json_decode($response->getBody()->getContents(), true);
+            $data = json_decode($response->getBody()->getContents(), true);
+            Redis::setex($cacheKey, 43200, json_encode($data));
+
+            return $data;
 
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];

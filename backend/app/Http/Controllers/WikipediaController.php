@@ -18,7 +18,7 @@ class WikipediaController extends Controller
     public function placeWikiPageHtml(Request $request)
     {
         $query = $request->input('query');  // Get search query from request
-
+        $noCache = $request->query('noCache');
         $response = $this->wikipediaService->getPlaceWikiPageHtml($query);
 
         return response()->json($response);
@@ -28,7 +28,7 @@ class WikipediaController extends Controller
     public function placeWikiPageMedia(Request $request)
     {
         $query = $request->input('query');  // Get search query from request
-
+        $noCache = $request->query('noCache');
         $response = $this->wikipediaService->getPlaceWikiPageMedia($query);
 
         return response()->json($response);

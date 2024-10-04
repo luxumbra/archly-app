@@ -2,51 +2,77 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Log;
+use App\Jobs\FetchNextPageJob;
 
 class GooglePlacesService
 {
-    protected $client, $apiKey, $endpoint;
+    protected $client, $endpoint, $fields;
+    private $apiKey;
 
     public function __construct()
     {
         $this->client = new Client();
         $this->apiKey = config('services.google.places_api_key');
-        $this->endpoint = 'https://places.googleapis.com/v1/';
+        $this->endpoint = config('services.google.places_api_uri');
+        $this->fields = 'places.displayName,places.formattedAddress,places.location,places.id,places.rating,nextPageToken';
     }
 
-    public function textSearch($query, $fields = 'places.displayName,places.formattedAddress,places.id', $locationBias = null)
+    public function textSearch($query, $fields, $location = null, $noCache = false, $radius = 10000, $nextPageToken = null)
     {
+        $cacheKey = 'places_search_' . md5("{$query}{$fields}{$location[0]}{$location[1]}{$radius}{$nextPageToken}");
+
+        if (Redis::exists($cacheKey) && !$noCache) {
+            return json_decode(Redis::get($cacheKey), true);
+        }
+
+        $url = "{$this->endpoint}/places:searchText";
+
+        $params = [
+            'textQuery' => $query,
+            'locationBias' => [
+                'circle' => [
+                    'center' => ['latitude' => $location[0], 'longitude' => $location[1]],
+                    'radius' => $radius
+                ]
+            ],
+        ];
+
+        if ($nextPageToken) {
+            $params['pageToken'] = $nextPageToken;
+        }
         try {
-            $requestBody = [
-                'textQuery' => $query,
-            ];
-
-            // Add location bias if provided
-            if ($locationBias) {
-                $requestBody['locationBias'] = $locationBias;
-            }
-
-            $response = $this->client->post("{$this->endpoint}places:searchText", [
+            $response = $this->client->post($url, [
+                'json' => $params,
                 'headers' => [
-                    'Content-Type' => 'application/json',
                     'X-Goog-Api-Key' => $this->apiKey,
-                    'X-Goog-FieldMask' => $fields,  // Define what fields to return
-                ],
-                'json' => $requestBody, // The JSON body with parameters
+                    'X-Goog-FieldMask' => $fields,
+                ]
             ]);
 
-            return json_decode($response->getBody()->getContents(), true);
+            $result = json_decode($response->getBody()->getContents(), true);
+
+            Redis::setex($cacheKey, 43200, json_encode($result)); // Cache for 24 hours
+
+            return $result;
+
+
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];
         }
     }
 
-    public function getPlaceDetails($placeId, $fields = 'displayName,formattedAddress,id')
+    public function getPlaceDetails($placeId, $fields = '*', $noCache = false)
     {
+        $cacheKey = "place_details_{$placeId}";
+        if (Redis::exists($cacheKey) && !$noCache) {
+            return json_decode(Redis::get($cacheKey), true);
+        }
+
         try {
-            $response = $this->client->get("{$this->endpoint}places/{$placeId}", [
+            $response = $this->client->get("{$this->endpoint}/places/{$placeId}", [
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'X-Goog-Api-Key' => $this->apiKey,
@@ -54,7 +80,11 @@ class GooglePlacesService
                 ],
             ]);
 
-            return json_decode($response->getBody()->getContents(), true);
+            $result = json_decode($response->getBody()->getContents(), true);
+            Redis::setex($cacheKey, 43200, json_encode($result));
+
+            return $result;
+
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];
         }

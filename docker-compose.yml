@@ -1,4 +1,30 @@
 services:
+ # Backend Service (Laravel)
+  archly-backend:
+    build:
+      context: ./
+      dockerfile: dockerfiles/backend.dockerfile
+    image: archly-backend
+    container_name: archly-backend
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - postgresql
+    ports:
+      - "${FORWARD_PHP_PORT:-9000}:9000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=pgsql
+      - DB_HOST=archly-db
+      - DB_PORT=${FORWARD_DB_PORT}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./backend:/var/www/html
+    networks:
+      - laravel
   # Nginx Service
   nginx:
     container_name: "nginx"
@@ -17,23 +43,28 @@ services:
     restart: unless-stopped
 
   # PHP-FPM Service (PHP 8.2)
-  php:
-      image: php:8.2-fpm
-      container_name: php
-      build:
-          context: ./
-          dockerfile: dockerfiles/php.dockerfile
-          args:
-              - UID=${UID:-1000}
-              - GID=${GID:-1000}
-      ports:
-          - "${FORWARD_PHP_PORT:-9000}:9000"
-      volumes:
-          - ./backend:/var/www/html:delegated
-          - ./dockerfiles/configs/custom.ini:/usr/local/etc/php/conf.d/custom.ini
-      networks:
-          - laravel
-      restart: unless-stopped
+  # php:
+  #     image: php:8.2-fpm
+  #     container_name: php
+  #     build:
+  #         context: ./
+  #         dockerfile: dockerfiles/php.dockerfile
+  #         args:
+  #             - UID=${UID:-1000}
+  #             - GID=${GID:-1000}
+  #     user: ${UID}:${GID}
+  #     environment:
+  #       - UID=${UID}
+  #       - GID=${GID}
+  #     ports:
+  #         - "${FORWARD_PHP_PORT:-9000}:9000"
+  #     volumes:
+  #         - ./backend:/var/www/html:delegated
+  #         - ./dockerfiles/configs/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+  #     networks:
+  #         - laravel
+  #     restart: unless-stopped
+
 
 
   # PostgreSQL Service
@@ -49,8 +80,6 @@ services:
         interval: 5s
         timeout: 5s
         retries: 5
-      depends_on:
-        - php
       volumes:
         - postgresql:/var/lib/postgresql/data
       ports:
@@ -110,32 +139,6 @@ services:
       restart: unless-stopped
 
 
-  # Backend Service (Laravel)
-  archly-backend:
-    build:
-      context: ./
-      dockerfile: dockerfiles/backend.dockerfile
-    container_name: archly-backend
-    restart: unless-stopped
-    depends_on:
-      - redis
-      - postgresql
-    environment:
-      - APP_ENV=local
-      - APP_DEBUG=true
-      - DB_CONNECTION=pgsql
-      - DB_HOST=archly-db
-      - DB_PORT=${FORWARD_DB_PORT}
-      - DB_DATABASE=${DB_DATABASE}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-    volumes:
-      - ./backend:/var/www/html
-    networks:
-      - laravel
-    # command: sh -c "php artisan migrate"
-
-
   # Frontend Service (Next.js)
   archly-frontend:
     build:
@@ -164,4 +167,5 @@ volumes:
 
 networks:
   laravel:
+    name: archly-app_laravel
     driver: bridge

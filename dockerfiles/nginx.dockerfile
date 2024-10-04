@@ -16,9 +16,8 @@ ADD dockerfiles/nginx/snippets/fastcgi-php.conf /etc/nginx/conf.d/snippets/fastc
 
 RUN if ! getent group laravel > /dev/null 2>&1; then \
     addgroup --gid ${GID} --system laravel; \
-  fi
-
-RUN if ! id -u laravel > /dev/null 2>&1; then \
+  fi \
+  && if ! id -u laravel > /dev/null 2>&1; then \
     adduser --system --no-create-home --uid ${UID} --ingroup laravel --shell /bin/sh laravel; \
   fi \
   && sed -i "s/user nginx/user laravel/g" /etc/nginx/nginx.conf \
