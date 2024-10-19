@@ -7,8 +7,8 @@ use GuzzleHttp\Client;
 
 class WikipediaService
 {
-    protected $client, $apiKey, $endpoint;
-
+    protected $client, $endpoint;
+    private $apiKey;
     public function __construct()
     {
         $this->client = new Client();
@@ -17,7 +17,7 @@ class WikipediaService
         $this->apiUA = 'Please contact dave@foresite.rocks';
     }
 
-    public function getPlaceWikiPageHtml($query, $noCache = false)
+    public function getWikiPageDetails($query, $noCache = false)
     {
         $cacheKey = "wiki_cache:{$query}";
 
@@ -82,7 +82,7 @@ class WikipediaService
         }
     }
 
-    public function getPlaceWikiPageMedia($query, $noCache = false)
+    public function getWikiPageMedia($query, $noCache = false)
     {
         $cacheKey = "wikimedia_cache:{$query}";
 

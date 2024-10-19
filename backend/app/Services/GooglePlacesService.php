@@ -4,8 +4,9 @@ namespace App\Services;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use App\Jobs\FetchNextPageJob;
+use App\Services\StringUtils;
 
 class GooglePlacesService
 {
@@ -53,8 +54,7 @@ class GooglePlacesService
             ]);
 
             $result = json_decode($response->getBody()->getContents(), true);
-
-            Redis::setex($cacheKey, 43200, json_encode($result)); // Cache for 24 hours
+            Redis::setex($cacheKey, 86400, json_encode($result)); // Cache for 24 hours
 
             return $result;
 
@@ -81,6 +81,7 @@ class GooglePlacesService
             ]);
 
             $result = json_decode($response->getBody()->getContents(), true);
+
             Redis::setex($cacheKey, 43200, json_encode($result));
 
             return $result;

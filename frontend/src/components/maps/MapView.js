@@ -4,6 +4,7 @@ import {APIProvider, Map} from '@vis.gl/react-google-maps';
 import { useState, useEffect } from 'react';
 import MapMarker from '@/components/maps/MapMarker'
 import axios from 'axios';
+import MapProvider from '@/providers/MapProvider';
 
 const MapView = () => {
   const [places, setPlaces] = useState([]);
@@ -32,7 +33,6 @@ const MapView = () => {
           throw new Error('Failed to fetch places');
         }
         const data = await response.json();
-        console.log({places: data.places });
         setPlaces(data.places); // Assuming the API returns a `places` array
       } catch (err) {
         setError(err.message);
@@ -46,7 +46,7 @@ const MapView = () => {
   }
 
   return (
-    <APIProvider apiKey={API_KEY}>
+    <MapProvider>
       <div className="relative text-black w-screen h-screen flex items-center justify-center z-0">
        <Map
         style={containerStyle}
@@ -64,7 +64,7 @@ const MapView = () => {
         )}
       </Map>
     </div>
-      </APIProvider>
+      </MapProvider>
   );
 };
 

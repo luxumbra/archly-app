@@ -12,9 +12,7 @@ const SiteDetail = () => {
   const [place, setPlace] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  //
-  const
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     if (id) {
@@ -22,7 +20,7 @@ const SiteDetail = () => {
         try {
           setLoading(true);
           const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_URL}/places/details`,
+            `${API_URL}/places/details`,
             {
               params: {
                 place_id: id, // Use the place_id from the query param
@@ -33,7 +31,6 @@ const SiteDetail = () => {
           );
 
           const { data } = response;
-          console.log({data});
           setPlace(data);
           setLoading(false);
         } catch (err) {
@@ -45,9 +42,9 @@ const SiteDetail = () => {
       fetchPlaceDetails();
     }
   }, [id]);
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-  if (!place) return <p>No place found.</p>;
+  if (loading) return <div className="flex items-center justify-center h-screen w-full"><p>Loading...</p></div>;
+  if (error) return <div className="flex items-center justify-center h-screen w-full"><p>{error}</p></div>;
+  if (!place) return <div className="flex items-center justify-center h-screen w-full"><p>No place found.</p></div>;
 
   return (
     <div className="w-full h-screen flex items-center justify-center">

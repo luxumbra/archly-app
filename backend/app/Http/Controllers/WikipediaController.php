@@ -19,7 +19,7 @@ class WikipediaController extends Controller
     {
         $query = $request->input('query');  // Get search query from request
         $noCache = $request->query('noCache');
-        $response = $this->wikipediaService->getPlaceWikiPageHtml($query);
+        $response = $this->wikipediaService->getWikiPageDetails($query);
 
         return response()->json($response);
     }
@@ -29,7 +29,7 @@ class WikipediaController extends Controller
     {
         $query = $request->input('query');  // Get search query from request
         $noCache = $request->query('noCache');
-        $response = $this->wikipediaService->getPlaceWikiPageMedia($query);
+        $response = $this->wikipediaService->getWikiPageMedia($query);
 
         return response()->json($response);
     }

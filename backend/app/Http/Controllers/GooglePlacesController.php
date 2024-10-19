@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Services\GooglePlacesService;
 
-class PlacesController extends Controller
+class GooglePlacesController extends Controller
 {
     protected $googlePlacesService;
 
@@ -39,11 +39,7 @@ class PlacesController extends Controller
         $noCache = $request->query('noCache');
 
         $response = $this->googlePlacesService->getPlaceDetails($placeId, $fields, $noCache);
-        // $wikiPage = StringUtils::convertToUnderscore($response->title);
-        // $data = [
-        //     'response' => response()->json($response),
-        //     'wikiPage' => $wikiPage,
-        // ];
+
         return response()->json($response);
     }
 

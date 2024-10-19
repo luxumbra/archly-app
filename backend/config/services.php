@@ -38,5 +38,10 @@ return [
         'places_api_uri' => env('GOOGLE_PLACES_API_URI'),
         'api_key' => env('GOOGLE_API_KEY'),
         'places_api_key' => env('GOOGLE_PLACES_API_KEY')
+    ],
+    'yoreoracle'=> [
+        'openai_api_uri' => env('OPENAI_API_URI'),
+        'openai_api_key' => env('OPENAI_API_KEY'),
+        'openai_model' => env('OPENAI_MODEL'),
     ]
 ];
