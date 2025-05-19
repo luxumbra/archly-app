@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000'), 'http://archly.local:3000/*', 'http://archly.local:80', 'http://127.0.0.1:80'],
+    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000'), 'http://archly.local:3000/*', 'http://archly.local:80', 'http://127.0.0.1:80', 'https://oryx-accurate-tadpole.ngrok-free.app/*', 'https://87bd79b5e6f8.ngrok.app/*'],
 
     'allowed_origins_patterns' => [],
 

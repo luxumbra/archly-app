@@ -45,7 +45,7 @@ class PlaceDataAggregatorService
 
             try {
                 // Fetch Wikipedia details
-                $aiDetails = $this->yoreOracleService->getPlaceDetails($placeName, $location);
+                $aiDetails = $this->yoreOracleService->getPlaceDetails($placeName, $location, $noCache);
             } catch (\Exception $e) {
                 $aiDetails = ['error' => 'Failed to fetch data from OpenAI'];
             }

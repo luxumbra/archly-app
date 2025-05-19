@@ -9,6 +9,7 @@ function slugify(str) {
 }
 
 function unslugify(slug) {
+  if (!slug) return null
   // Replace hyphens or underscores with spaces
   let result = slug.replace(/[-_]/g, ' ');
 

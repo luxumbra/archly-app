@@ -149,7 +149,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://archly.local/api
+      - NEXT_PUBLIC_API_URL=https://foresite.ngrok.dev/api
     volumes:
       - ./frontend:/app
     networks:

@@ -11,6 +11,7 @@ const MapView = () => {
   const [mapRef, setMapRef] = useState(null);
   const [error, setError] = useState(null);
   const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
+  const API_URI = process.env.NEXT_PUBLIC_API_URL;
 
   // Set the container style for a full-screen map
   const containerStyle = {
@@ -28,7 +29,7 @@ const MapView = () => {
     // Fetch the places data from the backend API
     const fetchPlaces = async () => {
       try {
-        const response = await fetch('http://archly.local/api/places/search?query=ancient+monuments+in+england&fields=places.displayName,places.formattedAddress,places.id,places.location'); // Update the URL with your backend's API endpoint
+        const response = await fetch(`${API_URI}/places/search?query=ancient+monuments+in+england&fields=places.displayName,places.formattedAddress,places.id,places.location`); // Update the URL with your backend's API endpoint
         if (!response.ok) {
           throw new Error('Failed to fetch places');
         }

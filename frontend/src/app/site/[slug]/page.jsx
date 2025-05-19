@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation' // Use next/navigation in the app directory
 import axios from 'axios'
 import Link from 'next/link'
+import SiteDetailMap from '@/components/maps/SiteDetailMap'
+import { camelToSentence, unslugify } from '@/utils/stringUtils'
 import { Button } from 'flowbite-react'
 
 const SiteDetail = () => {
@@ -85,7 +87,7 @@ const SiteDetail = () => {
         <div className="w-full min-h-screen flex flex-col items-center justify-start">
             <div className="w-full h-[66vh] z-0">
                 <SiteDetailMap
-                    location={place.placesData.location}
+                    location={place.parsedAiData.geoLocation}
                     title={place.placesData.displayName.text}
                     id={id}
                 />
@@ -102,13 +104,17 @@ const SiteDetail = () => {
                         <p>Address: {place.placesData.formattedAddress}</p>
                         {place.parsedAiData.geoLocation ? (
                             <p>
-                                Location: lat: {place.parsedAiData.geoLocation.latitude}{' '}
-                                lng: {place.parsedAiData.geoLocation.longitude}
+                                Location: lat:{' '}
+                                {place.parsedAiData.geoLocation.latitude} lng:{' '}
+                                {place.parsedAiData.geoLocation.longitude}
                             </p>
                         ) : null}
-                        {place.parsedAiData.ordnanceSurveyGridReference ?
-                            <p>OS Grid: {place.parsedAiData.ordnanceSurveyGridReference}</p>
-                            : null}
+                        {place.parsedAiData.ordnanceSurveyGridReference ? (
+                            <p>
+                                OS Grid:{' '}
+                                {place.parsedAiData.ordnanceSurveyGridReference}
+                            </p>
+                        ) : null}
                         <p>
                             Rating:{' '}
                             {place.placesData.rating ??
@@ -117,12 +123,12 @@ const SiteDetail = () => {
                     </div>
                     <div className="place-buttons absolute top-0 right-0">
                         <Button.Group>
-                            <Button
+                            {/* <Button
                                 color="gray"
-                                href={`https://www.google.com/maps/dir//${place.placesData.location.latitude},${place.placesData.location.longitude}`}
+                                href={`https://www.google.com/maps/dir//${place.parsedAiData.geoLocation.latitude},${place.parsedAiData.geoLocation.longitude}`}
                                 target="_blank">
                                 Directions
-                            </Button>
+                            </Button> */}
                             <Button color="gray" href="/">
                                 Back to map
                             </Button>
@@ -139,23 +145,96 @@ const SiteDetail = () => {
                     </p>
                 ) : (
                     <div className="prose-lg prose-a:text-green-700">
-                        {/* <SafeHTMLContent
-                            htmlContent={place.aiData}
-                            /> */}
                         {place.parsedAiData.historicalSignificance ? (
                             <div>
-                                <h3>Historical Significance</h3>
+                                <h3>
+                                    Historical & Archaeological Significance
+                                </h3>
                                 <p>
                                     {place.parsedAiData.historicalSignificance}
                                 </p>
                             </div>
                         ) : null}
-                        {place.parsedAiData.historicalSignificance ? (
+                        {place.parsedAiData.phasesOfConstruction ? (
                             <div>
-                                <h3>Archaeological Relevance</h3>
-                                <p>
-                                    {place.parsedAiData.archaeologicalRelevance}
-                                </p>
+                                <h3>Phases of Construction</h3>
+                                {place.parsedAiData.phasesOfConstruction.map(
+                                    phase => {
+                                        const {
+                                            phase: phaseLabel,
+                                            yearRange,
+                                            description,
+                                        } = phase
+                                        return (
+                                            <div>
+                                                <h4>
+                                                    {phaseLabel} ({yearRange})
+                                                </h4>
+                                                <p>{description}</p>
+                                            </div>
+                                        )
+                                    },
+                                )}
+                            </div>
+                        ) : null}
+                        {place.parsedAiData.culturalContext ? (
+                            <div>
+                                <h3>Cultural Context</h3>
+                                <p>{place.parsedAiData.culturalContext}</p>
+                            </div>
+                        ) : null}
+                        {place.parsedAiData.research ? (
+                            <div>
+                                <h3>Further reading</h3>
+                                    <ul className="flex flex-wrap ml-0 pl-0 gap-5 justify-between">
+                                        {place.parsedAiData.research.map(item => (
+                                            <li className="mb-0 pl-0 max-w-[45%] w-full">
+                                                <h4 className="font-bold">{item.title}</h4>
+                                                <p>{item.summary}</p>
+                                                <a href={item.url}>Visit resource</a>
+                                            </li>
+                                        )) }
+                                </ul>
+                            </div>
+                        ) : null}
+                        {place.parsedAiData.visitorInformation ? (
+                                <div>
+                                    <h3>Visitor Information</h3>
+                                <ul className='pl-0'>
+                                    {Object.entries(
+                                        place.parsedAiData.visitorInformation,
+                                    ).map(([key, value]) => (
+                                        <li key={key} className='pl-0 mt-0 mb-8 flex items-start justify-start'>
+                                            <strong className='capitalize w-1/5'>{camelToSentence(key)}:</strong>{' '}
+                                            {typeof value === 'object' ? (
+                                                <ul className='my-0 pl-0'>
+                                                    {Object.entries(value).map(([nestedKey, nestedValue]) => (
+                                                        <li className="capitalize mt-0 pl-0 last-of-type:mb-0">{camelToSentence(nestedKey)}:{' '} {nestedValue}</li>
+                                                    ))}
+                                                    </ul>
+                                            ) : (
+                                                    <span className='pl-0'>{value}</span>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ) : null}
+                        {place.parsedAiData.relatedLinks ? (
+                            <div>
+                                <h3>Links</h3>
+                                <ul>
+                                    {place.parsedAiData.relatedLinks.map(
+                                        link => {
+                                            const { title, url } = link
+                                            return (
+                                                <li>
+                                                    <a href={url}>{title}</a>
+                                                </li>
+                                            )
+                                        },
+                                    )}
+                                </ul>
                             </div>
                         ) : null}
                     </div>
@@ -164,11 +243,5 @@ const SiteDetail = () => {
         </div>
     )
 }
-
-import DOMPurify from 'dompurify'
-import SafeHTMLContent from '@/components/SafeHTMLContent'
-import MapView from '@/components/maps/MapView'
-import SiteDetailMap from '@/components/maps/SiteDetailMap'
-import { unslugify } from '@/utils/stringUtils'
 
 export default SiteDetail

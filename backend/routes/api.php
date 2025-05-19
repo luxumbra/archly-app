@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CacheController;
 use App\Http\Controllers\PlaceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,16 +24,10 @@ Route::prefix('places')->group(function () {
     Route::get('/nearby', [GooglePlacesController::class, 'nearbySearch']);
 });
 
-Route::prefix('wikipedia')->group(function () {
-    Route::prefix('page')->group(function () {
-        // Route for getting wikipedia entry for a given place
-        Route::get('/html', [WikipediaController::class, 'placeWikiPageHtml']);
-
-        Route::get('/media', [WikipediaController::class, 'placeWikiPageMedia']);
-
-    });
-});
-
 Route::prefix('place')->group(function () {
     Route::get('details', [PlaceController::class, 'show']);
+});
+
+Route::prefix('redis-cache')->group(function () {
+    Route::delete('/clear', [CacheController::class,'clearRedisCache']);
 });
