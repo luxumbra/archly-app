@@ -17,7 +17,7 @@ services:
       - APP_DEBUG=true
       - DB_CONNECTION=pgsql
       - DB_HOST=archly-db
-      - DB_PORT=${FORWARD_DB_PORT}
+      - DB_PORT=5432
       - DB_DATABASE=${DB_DATABASE}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
@@ -69,17 +69,24 @@ services:
 
   # PostgreSQL Service
   postgresql:
-      image: postgres:latest
+      image: postgres:13-alpine
       container_name: archly-db
       environment:
         POSTGRES_DB: ${DB_DATABASE}
         POSTGRES_USER: ${DB_USERNAME}
         POSTGRES_PASSWORD: ${DB_PASSWORD}
+      deploy:
+        resources:
+          limits:
+            memory: 512M
+          reservations:
+            memory: 256M
       healthcheck:
         test: [ "CMD-SHELL", "pg_isready -d ${DB_DATABASE} -U ${DB_USERNAME}" ]
-        interval: 5s
-        timeout: 5s
-        retries: 5
+        interval: 10s
+        timeout: 10s
+        retries: 3
+        start_period: 30s
       volumes:
         - postgresql:/var/lib/postgresql/data
       ports:
@@ -146,12 +153,13 @@ services:
       dockerfile: dockerfiles/frontend.dockerfile
     container_name: archly-frontend
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=https://foresite.ngrok.dev/api
+      - NEXT_PUBLIC_BACKEND_URL=http://localhost:8080/api
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     networks:
       - laravel
 

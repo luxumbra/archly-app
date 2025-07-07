@@ -1,54 +1,49 @@
 # Use official PHP 8.2-FPM image as base
-FROM php:8.2-fpm
+FROM php:8.2-fpm-alpine
 
 # Set working directory inside the container
 WORKDIR /var/www/html
 
-RUN if ! getent group laravel > /dev/null 2>&1; then \
-    addgroup --gid ${GID} --system laravel; \
-  fi \
-  && if ! id -u laravel > /dev/null 2>&1; then \
-    adduser --system --no-create-home --uid ${UID} --ingroup laravel --shell /bin/sh laravel; \
-  fi \
-  && chown -R laravel:laravel /var/www/html \
-  && chmod -R 755 /var/www/html
+# Set default UID and GID
+ARG UID=1000
+ARG GID=1000
 
-
-# Check if redis is installed, and install if not
-RUN if ! php -m | grep -q 'redis'; then \
-  pecl install redis && docker-php-ext-enable redis; \
-  fi
-
-RUN apt-get update && apt-get install -y cron rsyslog net-tools \
-  build-essential \
-  libpng-dev \
-  libjpeg-dev \
-  libfreetype6-dev \
-  locales \
-  zip \
-  jpegoptim optipng pngquant gifsicle \
-  vim \
-  unzip \
-  git \
+# Install system packages and create user
+RUN apk add --no-cache \
+  bash \
   curl \
+  git \
+  unzip \
+  autoconf \
+  gcc \
+  g++ \
+  make \
+  libpng-dev \
+  libjpeg-turbo-dev \
+  freetype-dev \
   libzip-dev \
-  libpq-dev \
-  libonig-dev \
-  && docker-php-ext-configure gd --with-freetype --with-jpeg \
-  && docker-php-ext-install -j$(nproc) gd
+  postgresql-dev \
+  oniguruma-dev \
+  && addgroup -g ${GID} laravel \
+  && adduser -u ${UID} -G laravel -s /bin/bash -D laravel
+
+# Configure and install GD extension
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install -j$(nproc) gd
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring zip exif pcntl
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Install Redis extension
+RUN pecl install redis && docker-php-ext-enable redis
+
 
 # Install Composer globally
 RUN echo "Install composer"
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # Install Laravel dependencies
-COPY ../backend/ ./
+COPY backend/ ./
 RUN composer install
 
 # Set up cron job

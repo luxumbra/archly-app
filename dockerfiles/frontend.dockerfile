@@ -1,26 +1,27 @@
 # Use official Node.js image as the base
-FROM node:18
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Install Bun using the official method
-RUN curl -fsSL https://bun.sh/install | bash && \
-    mv /root/.bun/bin/bun /usr/local/bin/bun
+# Install pnpm
+RUN npm install -g pnpm
 
-# Ensure Bun is available in the system PATH
-ENV PATH="/usr/local/bin:$PATH"
+# Copy package files first for better caching
+COPY frontend/package*.json ./
 
 # Install dependencies
-# Copy the entire application code
-# COPY . .
-COPY ../frontend ./
+RUN pnpm install
 
-RUN bun install
-
+# Copy the entire application code (excluding node_modules)
+COPY frontend/src ./src
+COPY frontend/public ./public  
+COPY frontend/tailwind.config.js ./tailwind.config.js
+COPY frontend/postcss.config.js ./postcss.config.js
+COPY frontend/jsconfig.json ./jsconfig.json
 
 # Expose port 3000 (Next.js dev server)
 EXPOSE 3000
 
 # Start the Next.js development server
-CMD ["bun", "run", "dev"]
+CMD ["pnpm", "run", "dev"]

@@ -1,0 +1,69 @@
+---
+---
+
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Background Map -->
+  <div 
+    class="absolute inset-0 bg-cover bg-center bg-gray-800"
+    style="background-image: url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cdefs%3E%3Cpattern id=\"smallGrid\" width=\"10\" height=\"10\" patternUnits=\"userSpaceOnUse\"%3E%3Cpath d=\"M 10 0 L 0 0 0 10\" fill=\"none\" stroke=\"%23374151\" stroke-width=\"0.5\"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\"100\" height=\"100\" fill=\"%231f2937\"/%3E%3Crect width=\"100\" height=\"100\" fill=\"url(%23smallGrid)\"/%3E%3C/svg%3E')"
+  >
+    <!-- Map pins scattered across -->
+    <div class="absolute top-1/4 left-1/4 text-yore-primary">
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+    </div>
+    <div class="absolute top-1/3 right-1/4 text-yore-primary">
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+    </div>
+    <div class="absolute bottom-1/3 left-1/3 text-yore-primary">
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+    </div>
+    <div class="absolute top-2/3 right-1/3 text-yore-primary">
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+    </div>
+    
+    <!-- Dark overlay -->
+    <div class="absolute inset-0 bg-black/50"></div>
+  </div>
+  
+  <!-- Content -->
+  <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+    <!-- Main Logo -->
+    <div class="mb-8">
+      <img src="/yore-logo.png" alt="Yore" class="w-67 h-auto mx-auto mb-4" style="width: 268px;" />
+    </div>
+    
+    <!-- Main Headline -->
+    <h1 class="text-5xl md:text-6xl font-serif font-normal text-white mb-6 leading-tight">
+      Explore, Log, and Share Your Historical Adventures
+    </h1>
+    
+    <!-- Subtitle -->
+    <p class="text-3xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed font-body font-light">
+      Join a community of history enthusiasts. Yore is your personal journal for 
+      documenting and sharing archaeological discoveries and historical site visits.
+    </p>
+    
+    <!-- CTA Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      <a href="#features" class="bg-yore-primary hover:bg-yore-primary/90 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+        Learn more
+      </a>
+      <a href="#signup" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-3 rounded-lg font-semibold transition-colors">
+        Sign up
+      </a>
+    </div>
+  </div>
+  
+  <!-- Bottom Logo -->
+  <div class="absolute bottom-8 left-8">
+    <img src="/yore-logo.png" alt="Yore" class="h-12 w-auto opacity-50" />
+  </div>
+</section>
