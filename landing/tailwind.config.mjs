@@ -5,18 +5,18 @@ export default {
     extend: {
       colors: {
         yore: {
-          primary: '#8B9A47', // Green from logo
+          primary: '#99A873', // Green from logo
           secondary: '#7A8EC4', // Blue-gray from design
-          dark: '#2D3748',
+          dark: '#1F2732',
           light: '#F7FAFC',
           explore: '#7B8C55',
-          log: '#786556', 
+          log: '#786556',
           social: '#B7613B',
           discover: '#5C7E9B'
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Open Sans', 'system-ui', 'sans-serif'],
         serif: ['Playfair Display', 'serif'],
         body: ['Open Sans', 'system-ui', 'sans-serif']
       }

@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-4xl lg:text-5xl font-serif font-normal text-white mb-6;
+  }
+  h2 {
+    @apply text-3xl lg:text-7xl  font-serif text-white mb-6;
+  }
+  h3 {
+    @apply text-5xl lg:text-7xl font-serif font-normal text-white mb-6;
+  }
+  h4 {
+    @apply text-lg lg:text-xl font-semibold mb-1 text-white;
+  }
+  h5 {
+    @apply text-lg lg:text-xl font-semibold mb-1 text-white;
+  }
+
+}
+
+@layer utilities {
+   /* .yore-map-bg {
+        @apply bg-yore-dark bg-cover bg-blend-luminosity bg-repeat-y;
+        background-image: url('../assets/images/page-bg.png');
+    } */
+/*
+    .yore-hero-bg {
+        @apply bg-yore-dark bg-cover bg-top bg-blend-luminosity;
+        background-image: url('../assets/images/hero-bg.png');
+    }*/
+
+    .feature-item {
+        @apply bg-bottom bg-no-repeat;
+        background-image: url('../assets/images/divider.svg');
+    }
+}

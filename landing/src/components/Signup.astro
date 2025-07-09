@@ -1,0 +1,44 @@
+---
+import flyoverVideo from '../assets/video/flyover.mp4';
+---
+
+<section id="signup" class="relative bg-yore-dark py-32 overflow-hidden">
+  <!-- Background Video -->
+   <div class="absolute inset-0 aspect-video object-cover overflow-hidden ">
+  <video
+    class="absolute inset-0 w-full h-full object-cover"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="metadata"
+  >
+    <source src="https://cdn.yore.earth/assets/video/flyover.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Dark overlay -->
+  <div class="absolute inset-0 bg-black/80 shadow-[0_0_30px_rgba(0,0,0,0.8)_inset]"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-4xl mx-auto text-center px-6">
+    <h2 class="text-7xl font-serif text-yore-social mb-6">
+      Join Yore Today
+    </h2>
+    <p class="text-2xl text-gray-300 mb-8">
+      Discover history in new ways. Sign up to get the latest updates on our progress & get early access to the beta version in 2025.
+    </p>
+    <form class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
+      <input
+        type="email"
+        name="email"
+        placeholder="Your email address"
+        class="flex-1 px-4 py-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:border-yore-primary focus:outline-none"
+        required
+      />
+      <button type="submit" class="bg-yore-primary hover:bg-yore-primary/90 text-white px-8 py-3 rounded-lg transition-colors whitespace-nowrap">
+        Join
+      </button>
+    </form>
+  </div>
+</section>

@@ -1,138 +1,36 @@
 ---
+import { Image } from "astro:assets"
+import AppPreviewBg from "../assets/images/yore-mobile-mock.png"
+import HeroBg from "../assets/images/hero-bg.png"
 ---
 
-<section id="what-is-yore" class="relative min-h-screen bg-gray-900 flex items-center overflow-hidden">
+<section id="what-is-yore" class="relative min-h-screen bg-yore-dark flex items-center overflow-hidden">
   <!-- Background Map -->
-  <div 
-    class="absolute inset-0 bg-cover bg-center"
-    style="background-image: url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cdefs%3E%3Cpattern id=\"grid\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"%3E%3Cpath d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"%23374151\" stroke-width=\"1\"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\"100\" height=\"100\" fill=\"%231f2937\"/%3E%3Crect width=\"100\" height=\"100\" fill=\"url(%23grid)\"/%3E%3C/svg%3E')"
-  >
-    <!-- Map locations -->
-    <div class="absolute top-1/4 left-1/6 text-yore-primary opacity-60">
-      <div class="text-xs text-white mb-1">Normandy</div>
-      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-      </svg>
-    </div>
-    
-    <div class="absolute top-1/3 left-1/4 text-yore-primary opacity-60">
-      <div class="text-xs text-white mb-1">England</div>
-      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-      </svg>
-    </div>
-
-    <div class="absolute bottom-1/3 left-1/3 text-yore-primary opacity-60">
-      <div class="text-xs text-white mb-1">Austria</div>
-      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-      </svg>
-    </div>
-
-    <!-- Dark overlay -->
-    <div class="absolute inset-0 bg-black/40"></div>
+  <div class="absolute inset-0 bg-cover bg-center">
+    <Image src={HeroBg} alt="Hero Background" class="absolute inset-0 w-full h-full object-cover mix-blend-luminosity" />
   </div>
 
   <div class="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
     <!-- Left Content -->
     <div>
-      <h1 class="text-4xl md:text-5xl font-serif font-bold text-white mb-6">
+      <h2>
         What is Yore?
-      </h1>
-      <div class="space-y-4 text-lg text-gray-300 leading-relaxed">
-        <p>
-          Yore is a social app designed for archaeology and history lovers. 
-          Whether you're an amateur historian, a seasoned archaeologist, or 
+      </h2>
+      <div class="text-gray-300 leading-relaxed">
+        <p class="text-2xl font-sans font-thin mb-4">
+          Yore is a social app designed for archaeology and history lovers.
+          Whether you're an amateur historian, a seasoned archaeologist, or
           someone who simply enjoys visiting historical sites.
         </p>
-        <p>
-          You can stay current share findings made in exploration with a 
-          community of like-minded explorers. Document your visits with notes, 
-          photos, and GPS locations, and explore entries from other history 
+        <p class="text-base">
+          You can stay current and share findings made in exploration with a
+          community of like-minded explorers. Chat to the "Yore-acle", an AI powered historian chatbot, document your visits with notes, photos, and GPS locations, and explore entries from other history
           enthusiasts around the world.
         </p>
       </div>
     </div>
-
-    <!-- Right - Phone Mockup -->
-    <div class="flex justify-center lg:justify-end">
-      <div class="relative">
-        <!-- Phone Frame -->
-        <div class="w-72 h-[600px] bg-gray-800 rounded-[3rem] p-3 shadow-2xl">
-          <div class="w-full h-full bg-gray-900 rounded-[2.5rem] overflow-hidden relative">
-            <!-- Status Bar -->
-            <div class="bg-gray-800 h-8 flex items-center justify-between px-6 text-white text-sm">
-              <span>9:41</span>
-              <div class="flex space-x-1">
-                <div class="w-4 h-2 bg-white rounded-sm"></div>
-                <div class="w-1 h-2 bg-white rounded-sm"></div>
-                <div class="w-6 h-2 bg-white rounded-sm"></div>
-              </div>
-            </div>
-
-            <!-- App Content -->
-            <div class="p-4 h-full bg-green-800 relative" style="background-image: url('data:image/svg+xml,%3Csvg width=\"50\" height=\"50\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cdefs%3E%3Cpattern id=\"phoneGrid\" width=\"10\" height=\"10\" patternUnits=\"userSpaceOnUse\"%3E%3Cpath d=\"M 10 0 L 0 0 0 10\" fill=\"none\" stroke=\"%23065f46\" stroke-width=\"0.5\"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\"50\" height=\"50\" fill=\"%23047857\"/%3E%3Crect width=\"50\" height=\"50\" fill=\"url(%23phoneGrid)\"/%3E%3C/svg%3E')">
-              <!-- AR UI Elements -->
-              <div class="absolute top-16 right-4 bg-black/50 rounded-lg p-3">
-                <div class="text-white text-xs font-bold">AR LI</div>
-                <div class="text-yellow-400 text-xs">Stonehenge</div>
-                <div class="text-gray-300 text-xs mt-1">Historical Site</div>
-                <div class="flex mt-2 space-x-1">
-                  <div class="w-4 h-4 bg-yellow-400 rounded"></div>
-                  <div class="w-4 h-4 bg-gray-400 rounded"></div>
-                  <div class="w-4 h-4 bg-gray-400 rounded"></div>
-                </div>
-              </div>
-
-              <!-- Center AR Marker -->
-              <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div class="text-yore-primary">
-                  <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                  </svg>
-                </div>
-              </div>
-
-              <!-- Bottom UI -->
-              <div class="absolute bottom-4 left-4 right-4">
-                <div class="bg-black/50 rounded-lg p-3 mb-3">
-                  <div class="text-white text-sm font-bold">Distance: 50m</div>
-                  <div class="text-gray-300 text-xs">Archaeological site</div>
-                </div>
-                
-                <div class="flex justify-between items-center">
-                  <!-- Bottom nav icons -->
-                  <div class="flex space-x-4">
-                    <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                      <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                      </svg>
-                    </div>
-                    <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                      <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M9 11H7v9a2 2 0 002 2h8a2 2 0 002-2v-9h-2m-7 0V6a2 2 0 012-2h4a2 2 0 012 2v5m-6 0h4"/>
-                      </svg>
-                    </div>
-                    <div class="w-8 h-8 bg-yore-primary rounded-full flex items-center justify-center">
-                      <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M21 16V4a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2z"/>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="flex justify-end items-center">
+        <Image src={AppPreviewBg} alt="App Preview Background" class="mix-blend-normal w-3/4 h-auto" />
     </div>
-  </div>
-
-  <!-- Footer -->
-  <div class="absolute bottom-4 left-6 text-gray-400 text-sm">
-    © Yore 2024. All rights reserved
-  </div>
-  <div class="absolute bottom-4 right-6 text-gray-400 text-sm">
-    Design & Build by <span class="text-white">Foreste</span>
   </div>
 </section>
