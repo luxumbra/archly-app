@@ -91,14 +91,14 @@ const discoverFeatures = [
     }
 </style>
 
-<section id="features" class="bg-yore-dark yore-map-bg py-32">
+<section id="features" class="bg-yore-dark py-32 yore-map-bg">
   <!-- Header -->
-  <div class="py-16">
-    <div class="max-w-4xl mx-auto text-center px-6">
+  <div class="">
+    <div class="max-w-4xl mx-auto text-center px-4 lg:px-6">
       <h2 class="text-yore-primary">
         Discover, Log, and Share the World's Historical Wonders
       </h2>
-      <p class="text-2xl text-gray-300 leading-relaxed font-light">
+      <p>
         Yore combines cutting-edge technology with a passion for archaeology
         to enhance your exploration experience.
       </p>
@@ -107,22 +107,22 @@ const discoverFeatures = [
 
   <!-- Explore Section -->
   <div class="py-24 feature-item">
-    <div class="max-w-7xl mx-auto px-6">
+    <div class="max-w-7xl mx-auto px-4 lg:px-6">
       <h3 class="text-yore-explore">Explore</h3>
-      <p class="text-xl text-gray-300 font-extralight leading-relaxed mb-12 max-w-4xl">
+      <p class="max-w-4xl">
         Find historical and archaeological sites across the globe with Yore's interactive map and cutting-edge AR experiences. Whether you're on-site, planning a visit or simply exploring from home, Yore brings history to your fingertips.
       </p>
       <div class="grid md:grid-cols-3 gap-8">
         {exploreFeatures.map((feature) => (
           <div class="text-left">
-            <div class="flex items-start gap-4 mb-4">
+            <div class="flex items-start gap-4 mb-2 lg:mb-4">
               <feature.icon />
               <div>
                 <h4>{feature.title}</h4>
                 <p class="text-gray-400 text-sm">{feature.subtitle}</p>
               </div>
             </div>
-            <p class="text-gray-300 leading-relaxed">{feature.description}</p>
+            <p>{feature.description}</p>
           </div>
         ))}
       </div>
@@ -132,21 +132,21 @@ const discoverFeatures = [
   <!-- Log Section -->
   <div class="py-24 feature-item">
     <div class="max-w-7xl mx-auto px-6">
-      <h3 class="text-7xl font-serif text-left mb-8 text-yore-log">Log</h3>
-      <p class="text-xl text-gray-300 font-extralight leading-relaxed mb-12 max-w-4xl">
+      <h3 class="text-yore-log">Log</h3>
+      <p class="max-w-4xl">
         Keep track of your historical discoveries with Yore's personal logging features. Capture memories, share insights, and build a personal archive of your experiences.
       </p>
       <div class="grid md:grid-cols-2 gap-8">
         {logFeatures.map((feature) => (
           <div class="text-left">
-            <div class="flex items-start gap-4 mb-4">
+            <div class="flex items-start gap-4  mb-2 lg:mb-4">
                 <feature.icon />
               <div>
                 <h4>{feature.title}</h4>
                 <p class="text-gray-400 text-sm">{feature.subtitle}</p>
               </div>
             </div>
-            <p class="text-gray-300 leading-relaxed">{feature.description}</p>
+            <p>{feature.description}</p>
           </div>
         ))}
       </div>
@@ -157,20 +157,20 @@ const discoverFeatures = [
   <div class="py-24 feature-item">
     <div class="max-w-7xl mx-auto px-6">
       <h3 class="text-yore-social">Social</h3>
-      <p class="text-xl text-gray-300 font-extralight leading-relaxed mb-12 max-w-4xl">
+      <p class="max-w-4xl">
         Find historical and archaeological sites across the globe with Yore's interactive and cutting-edge AR experiences. Whether you're visiting planning a visit or simply exploring from home, Yore brings history to your experiences.
       </p>
       <div class="grid md:grid-cols-2 gap-8">
         {socialFeatures.map((feature) => (
           <div class="text-left">
-            <div class="flex items-start gap-4 mb-4">
+            <div class="flex items-start gap-4 mb-2 lg:mb-4">
               <feature.icon />
               <div>
                 <h4>{feature.title}</h4>
                 <p class="text-gray-400 text-sm">{feature.subtitle}</p>
               </div>
             </div>
-            <p class="text-gray-300 leading-relaxed">{feature.description}</p>
+            <p>{feature.description}</p>
           </div>
         ))}
       </div>
@@ -181,20 +181,20 @@ const discoverFeatures = [
   <div class="py-24 feature-item">
     <div class="max-w-7xl mx-auto px-6">
       <h3 class="text-yore-discover">Discover</h3>
-      <p class="text-xl text-gray-300 font-extralight leading-relaxed mb-12 max-w-4xl">
+      <p class="max-w-4xl">
         Stay up-to-date with the world's most fascinating sites. Yore provides detailed historical content and analysis, helping you understand what you're exploring from home, Yore brings history to your fingertips.
       </p>
       <div class="grid md:grid-cols-2 gap-8">
         {discoverFeatures.map((feature) => (
           <div class="text-left">
-            <div class="flex items-start gap-4 mb-4">
+            <div class="flex items-start gap-4 mb-2 lg:mb-4">
               <feature.icon />
               <div>
                 <h4>{feature.title}</h4>
                 <p class="text-gray-400 text-sm">{feature.subtitle}</p>
               </div>
             </div>
-            <p class="text-gray-300 leading-relaxed">{feature.description}</p>
+            <p>{feature.description}</p>
           </div>
         ))}
       </div>

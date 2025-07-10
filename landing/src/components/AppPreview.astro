@@ -4,10 +4,11 @@ import AppPreviewBg from "../assets/images/yore-mobile-mock.png"
 import HeroBg from "../assets/images/hero-bg.png"
 ---
 
-<section id="what-is-yore" class="relative min-h-screen bg-yore-dark flex items-center overflow-hidden">
+<section id="what-is-yore" class="relative min-h-screen bg-yore-dark flex items-center overflow-hidden py-32">
   <!-- Background Map -->
   <div class="absolute inset-0 bg-cover bg-center">
     <Image src={HeroBg} alt="Hero Background" class="absolute inset-0 w-full h-full object-cover mix-blend-luminosity" />
+    <div class="absolute inset-0 bg-yore-dark/70 lg:bg-yore-dark/20 z-10" />
   </div>
 
   <div class="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
@@ -16,20 +17,20 @@ import HeroBg from "../assets/images/hero-bg.png"
       <h2>
         What is Yore?
       </h2>
-      <div class="text-gray-300 leading-relaxed">
-        <p class="text-2xl font-sans font-thin mb-4">
+      <div class=leading-relaxed">
+        <p>
           Yore is a social app designed for archaeology and history lovers.
           Whether you're an amateur historian, a seasoned archaeologist, or
           someone who simply enjoys visiting historical sites.
         </p>
-        <p class="text-base">
+        <p>
           You can stay current and share findings made in exploration with a
           community of like-minded explorers. Chat to the "Yore-acle", an AI powered historian chatbot, document your visits with notes, photos, and GPS locations, and explore entries from other history
           enthusiasts around the world.
         </p>
       </div>
     </div>
-    <div class="flex justify-end items-center">
+    <div class="flex justify-center lg:justify-end items-center">
         <Image src={AppPreviewBg} alt="App Preview Background" class="mix-blend-normal w-3/4 h-auto" />
     </div>
   </div>
