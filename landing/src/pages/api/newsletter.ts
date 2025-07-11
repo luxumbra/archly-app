@@ -1,9 +1,6 @@
 import type { APIRoute } from "astro";
 import { Resend } from "resend";
-import {
-  signupWelcomeEmail,
-  SignupWelcomeEmailTemplate,
-} from "../../client/components/SignupWelcomeEmail";
+import { signupWelcomeEmail } from "../../client/components/SignupWelcomeEmail";
 import { constants } from "../../contants";
 
 export const prerender = false;

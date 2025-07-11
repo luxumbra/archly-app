@@ -29,7 +29,7 @@ export default function SignupForm() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form data:", { email, turnstileToken });
+
     if (!email.trim()) {
       showMessage("Please enter your email address.", "error");
       return;
@@ -41,13 +41,10 @@ export default function SignupForm() {
     }
 
     setIsLoading(true);
-    console.log("Turnstile token:", turnstileToken);
-    console.log("Token length:", turnstileToken?.length);
     try {
       const formData = new FormData();
       formData.append("email", email);
       formData.append("cf-turnstile-response", turnstileToken);
-      console.log("FormData entries:", Array.from(formData.entries()));
 
       const response = await fetch("/api/newsletter", {
         method: "POST",
