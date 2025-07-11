@@ -30,6 +30,9 @@
   h3 + p {
     @apply text-lg lg:text-xl text-gray-300 font-light leading-normal lg:leading-relaxed mb-12;
   }
+  .box-test > * {
+    @apply outline outline-1 outline-red-500;
+  }
 }
 
 @layer utilities {
