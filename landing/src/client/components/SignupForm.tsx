@@ -98,6 +98,7 @@ export default function SignupForm() {
           {isLoading ? "Signing up..." : "Sign up"}
         </button>
       </div>
+
       {/* Turnstile Widget */}
       <div className="flex justify-center mb-4">
         <Turnstile
@@ -118,6 +119,15 @@ export default function SignupForm() {
           {message.text}
         </div>
       )}
+      <div className="text-sm text-gray-400">
+        <p className="mt-2 text-xs text-gray-400">
+          We value your privacy. We'll only use your email for Yore updates and
+          won't share it with third parties.
+          <a href="/privacy" className="underline">
+            Privacy Policy
+          </a>
+        </p>
+      </div>
     </form>
   );
 }

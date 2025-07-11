@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import AppPreviewBg from "../assets/images/yore-mobile-mock.png";
 import HeroBg from "../assets/images/hero-bg.png";
+import { AnimateTitles } from "./animation/Animations";
 ---
 
 <section
@@ -52,3 +53,5 @@ import HeroBg from "../assets/images/hero-bg.png";
     </div>
   </div>
 </section>
+
+<AnimateTitles client:load />

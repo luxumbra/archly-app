@@ -26,6 +26,7 @@
     "@astrojs/netlify": "^6.4.1",
     "@astrojs/react": "^4.3.0",
     "@astrojs/tailwind": "^6.0.2",
+    "@gsap/react": "^2.1.2",
     "@marsidev/react-turnstile": "^1.1.0",
     "@react-email/components": "^0.2.0",
     "@types/react": "^19.1.8",
