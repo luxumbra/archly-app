@@ -1,34 +1,36 @@
 ---
-import MapIcon from '../assets/icons/map.svg';
-import ArIcon from '../assets/icons/ar.svg';
-import LidarIcon from '../assets/icons/lidar.svg';
-import JournalIcon from '../assets/icons/journal.svg';
-import AchievementsIcon from '../assets/icons/achievements.svg';
-import CommunityIcon from '../assets/icons/community.svg';
-import ConnectIcon from '../assets/icons/connect.svg';
-import ArticlesIcon from '../assets/icons/articles.svg';
-import NewsIcon from '../assets/icons/news.svg';
-
+import MapIcon from "../assets/icons/map.svg";
+import ArIcon from "../assets/icons/ar.svg";
+import LidarIcon from "../assets/icons/lidar.svg";
+import JournalIcon from "../assets/icons/journal.svg";
+import AchievementsIcon from "../assets/icons/achievements.svg";
+import CommunityIcon from "../assets/icons/community.svg";
+import ConnectIcon from "../assets/icons/connect.svg";
+import ArticlesIcon from "../assets/icons/articles.svg";
+import NewsIcon from "../assets/icons/news.svg";
 
 const exploreFeatures = [
   {
     icon: MapIcon,
     title: "Interactive Map",
     subtitle: "Discover historical sites around the world.",
-    description: "Use the interactive map to explore nearby historical sites or plan future visits. Filter sites by category or interest, making it simple to find exactly what you're looking for."
+    description:
+      "Discover historical sites near you or plan your next adventure. Filter by era, site type, or archaeological significance to find exactly what sparks your curiosity.",
   },
   {
     icon: ArIcon,
-    title: "Augmented Reality (AR)",
-    subtitle: "See ancient sites come to life in real-time.",
-    description: "Use AR to explore sites as they existed in their prime. Yore's AR feature overlays reconstructions and 3D models, allowing you to visualize ruins, monuments, and artifacts in your surroundings."
+    title: "AI Enhanced",
+    subtitle: "Meet the Yore-acle: Your AI Archaeology Expert",
+    description:
+      "Ask our AI historian anything about any site, anywhere in the world. Get instant analysis of historical significance, construction techniques, cultural context, and archaeological discoveries. It's like having a personal archaeology professor in your pocket..",
   },
   {
     icon: LidarIcon,
     title: "LiDAR & Hidden Layers",
     subtitle: "Reveal what lies beneath.",
-    description: "Use LiDAR overlays to uncover hidden structures beneath archaeological sites. Explore underground ruins or visualize ancient landscapes with advanced mapping technology."
-  }
+    description:
+      "Reveal what archaeologists see beneath the surface. Our LiDAR technology exposes hidden foundations, buried structures, and ancient field systems invisible to the naked eye. Explore sites like a professional researcher.",
+  },
 ];
 
 const logFeatures = [
@@ -36,14 +38,16 @@ const logFeatures = [
     icon: JournalIcon,
     title: "Personal Journals",
     subtitle: "Capture memories and insights.",
-    description: "All of your historical discoveries with Yore's personal logging features. Capture memories, share insights, and track your own stories of record along with your experiences."
+    description:
+      "Document every discovery with Yore's comprehensive logging tools. Capture photos, record insights, save GPS coordinates, and build your personal archive of historical adventures.",
   },
   {
     icon: AchievementsIcon,
     title: "Check-ins and Achievements",
     subtitle: "Earn badges and track achievements.",
-    description: "Track your progress and earn achievements while you're documenting. Your progress over time and share all of your achievements to stay entertained."
-  }
+    description:
+      "Earn recognition for your discoveries. Get points for being first to document a site, unlock achievement badges, and track your exploration milestones. Share your progress with the community.",
+  },
 ];
 
 const socialFeatures = [
@@ -51,14 +55,16 @@ const socialFeatures = [
     icon: CommunityIcon,
     title: "Community Contributions",
     subtitle: "Add sites to the global database.",
-    description: "Add historical and archaeological sites to your field notes whilst helping to grow a global database that helps to aid research, making it simple to find these archaeological and historical sites globally."
+    description:
+      "Contribute to archaeological knowledge. Add newly discovered sites to our global database, helping researchers and fellow explorers worldwide. Every contribution earns you discovery points and community recognition.",
   },
   {
     icon: ConnectIcon,
     title: "Connect with Like-Minded Explorers",
     subtitle: "Join a thriving global network.",
-    description: "Connect with fellow archaeologists, historians, and history enthusiasts via coordinates, allowing you to visualise what archaeologists and historians activities around the world."
-  }
+    description:
+      "Join a global network of history enthusiasts. Follow other explorers' discoveries, share your findings, and collaborate on archaeological research. Connect with professionals and amateurs who share your passion for the past.",
+  },
 ];
 
 const discoverFeatures = [
@@ -66,139 +72,159 @@ const discoverFeatures = [
     icon: ArticlesIcon,
     title: "Historical Insights and Articles",
     subtitle: "Deep dive into the past.",
-    description: "Dive deep into the history behind archaeology's most fascinating sites. From detailed historical insights, expert analysis, and a wealth of information about these archaeological treasures found around the globe."
+    description:
+      "Access expert-level historical analysis for every site. Our curated content includes archaeological research, historical context, and cultural significance. Understand not just what you're seeing, but why it matters.",
   },
   {
     icon: NewsIcon,
     title: "News and Updates",
     subtitle: "Stay current with latest discoveries.",
-    description: "Stay informed with the latest archaeological discoveries, field site historical research findings, and updates about the fields of interest in archaeology, anthropology and historical preservation around the world."
-  }
+    description:
+      "Stay current with archaeological breakthroughs. Get updates on new discoveries, ongoing excavations, and research findings relevant to sites you've visited or want to explore.",
+  },
 ];
 ---
-<style>
-    .yore-map-bg {
-        background-image: url('../assets/images/page-bg.png');
-        background-size: cover;
-        background-position: top center;
-        background-repeat: repeat-y;
-    }
 
-    .feature-item {
-        background-image: url('../assets/images/divider.svg');
-        background-repeat: no-repeat;
-        background-position: bottom center;
-    }
+<style>
+  .yore-map-bg {
+    background-image: url("../assets/images/page-bg.png");
+    background-size: cover;
+    background-position: top center;
+    background-repeat: repeat-y;
+  }
+
+  .feature-item {
+    background-image: url("../assets/images/divider.svg");
+    background-repeat: no-repeat;
+    background-position: bottom center;
+  }
 </style>
 
-<section id="features" class="bg-yore-dark py-32 yore-map-bg">
+<section id="features" class="py-32 bg-yore-dark yore-map-bg">
   <!-- Header -->
   <div class="">
-    <div class="max-w-4xl mx-auto text-center px-4 lg:px-6">
+    <div class="max-w-4xl px-4 mx-auto text-center lg:px-6">
       <h2 class="text-yore-primary">
         Discover, Log, and Share the World's Historical Wonders
       </h2>
       <p>
-        Yore combines cutting-edge technology with a passion for archaeology
-        to enhance your exploration experience.
+        Combining LiDAR mapping, AI analysis, and community knowledge to reveal
+        the hidden stories beneath your feet.
       </p>
     </div>
   </div>
 
   <!-- Explore Section -->
   <div class="py-24 feature-item">
-    <div class="max-w-7xl mx-auto px-4 lg:px-6">
+    <div class="px-4 mx-auto max-w-7xl lg:px-6">
       <h3 class="text-yore-explore">Explore</h3>
       <p class="max-w-4xl">
-        Find historical and archaeological sites across the globe with Yore's interactive map and cutting-edge AR experiences. Whether you're on-site, planning a visit or simply exploring from home, Yore brings history to your fingertips.
+        Find historical and archaeological sites across the globe with Yore's
+        interactive map and cutting-edge AR experiences. Whether you're on-site,
+        planning a visit or simply exploring from home, Yore brings history to
+        your fingertips.
       </p>
-      <div class="grid md:grid-cols-3 gap-8">
-        {exploreFeatures.map((feature) => (
-          <div class="text-left">
-            <div class="flex items-start gap-4 mb-2 lg:mb-4">
-              <feature.icon />
-              <div>
-                <h4>{feature.title}</h4>
-                <p class="text-gray-400 text-sm">{feature.subtitle}</p>
+      <div class="grid gap-8 md:grid-cols-3">
+        {
+          exploreFeatures.map((feature) => (
+            <div class="text-left">
+              <div class="flex items-start gap-4 mb-2 lg:mb-4">
+                <feature.icon />
+                <div>
+                  <h4>{feature.title}</h4>
+                  <p class="text-sm text-gray-400">{feature.subtitle}</p>
+                </div>
               </div>
+              <p>{feature.description}</p>
             </div>
-            <p>{feature.description}</p>
-          </div>
-        ))}
+          ))
+        }
       </div>
     </div>
   </div>
 
   <!-- Log Section -->
   <div class="py-24 feature-item">
-    <div class="max-w-7xl mx-auto px-6">
+    <div class="px-6 mx-auto max-w-7xl">
       <h3 class="text-yore-log">Log</h3>
       <p class="max-w-4xl">
-        Keep track of your historical discoveries with Yore's personal logging features. Capture memories, share insights, and build a personal archive of your experiences.
+        Keep track of your historical discoveries with Yore's personal logging
+        features. Capture memories, share insights, and build a personal archive
+        of your experiences.
       </p>
-      <div class="grid md:grid-cols-2 gap-8">
-        {logFeatures.map((feature) => (
-          <div class="text-left">
-            <div class="flex items-start gap-4  mb-2 lg:mb-4">
+      <div class="grid gap-8 md:grid-cols-2">
+        {
+          logFeatures.map((feature) => (
+            <div class="text-left">
+              <div class="flex items-start gap-4 mb-2 lg:mb-4">
                 <feature.icon />
-              <div>
-                <h4>{feature.title}</h4>
-                <p class="text-gray-400 text-sm">{feature.subtitle}</p>
+                <div>
+                  <h4>{feature.title}</h4>
+                  <p class="text-sm text-gray-400">{feature.subtitle}</p>
+                </div>
               </div>
+              <p>{feature.description}</p>
             </div>
-            <p>{feature.description}</p>
-          </div>
-        ))}
+          ))
+        }
       </div>
     </div>
   </div>
 
   <!-- Social Section -->
   <div class="py-24 feature-item">
-    <div class="max-w-7xl mx-auto px-6">
+    <div class="px-6 mx-auto max-w-7xl">
       <h3 class="text-yore-social">Social</h3>
       <p class="max-w-4xl">
-        Find historical and archaeological sites across the globe with Yore's interactive and cutting-edge AR experiences. Whether you're visiting planning a visit or simply exploring from home, Yore brings history to your experiences.
+        Find historical and archaeological sites across the globe with Yore's
+        interactive and cutting-edge AR experiences. Whether you're visiting
+        planning a visit or simply exploring from home, Yore brings history to
+        your experiences.
       </p>
-      <div class="grid md:grid-cols-2 gap-8">
-        {socialFeatures.map((feature) => (
-          <div class="text-left">
-            <div class="flex items-start gap-4 mb-2 lg:mb-4">
-              <feature.icon />
-              <div>
-                <h4>{feature.title}</h4>
-                <p class="text-gray-400 text-sm">{feature.subtitle}</p>
+      <div class="grid gap-8 md:grid-cols-2">
+        {
+          socialFeatures.map((feature) => (
+            <div class="text-left">
+              <div class="flex items-start gap-4 mb-2 lg:mb-4">
+                <feature.icon />
+                <div>
+                  <h4>{feature.title}</h4>
+                  <p class="text-sm text-gray-400">{feature.subtitle}</p>
+                </div>
               </div>
+              <p>{feature.description}</p>
             </div>
-            <p>{feature.description}</p>
-          </div>
-        ))}
+          ))
+        }
       </div>
     </div>
   </div>
 
   <!-- Discover Section -->
   <div class="py-24 feature-item">
-    <div class="max-w-7xl mx-auto px-6">
+    <div class="px-6 mx-auto max-w-7xl">
       <h3 class="text-yore-discover">Discover</h3>
       <p class="max-w-4xl">
-        Stay up-to-date with the world's most fascinating sites. Yore provides detailed historical content and analysis, helping you understand what you're exploring from home, Yore brings history to your fingertips.
+        Stay up-to-date with the world's most fascinating sites. Yore provides
+        detailed historical content and analysis, helping you understand what
+        you're exploring from home, Yore brings history to your fingertips.
       </p>
-      <div class="grid md:grid-cols-2 gap-8">
-        {discoverFeatures.map((feature) => (
-          <div class="text-left">
-            <div class="flex items-start gap-4 mb-2 lg:mb-4">
-              <feature.icon />
-              <div>
-                <h4>{feature.title}</h4>
-                <p class="text-gray-400 text-sm">{feature.subtitle}</p>
+      <div class="grid gap-8 md:grid-cols-2">
+        {
+          discoverFeatures.map((feature) => (
+            <div class="text-left">
+              <div class="flex items-start gap-4 mb-2 lg:mb-4">
+                <feature.icon />
+                <div>
+                  <h4>{feature.title}</h4>
+                  <p class="text-sm text-gray-400">{feature.subtitle}</p>
+                </div>
               </div>
+              <p>{feature.description}</p>
             </div>
-            <p>{feature.description}</p>
-          </div>
-        ))}
+          ))
+        }
       </div>
     </div>
   </div>
-
 </section>

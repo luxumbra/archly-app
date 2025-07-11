@@ -1,37 +1,54 @@
 ---
-import { Image } from "astro:assets"
-import AppPreviewBg from "../assets/images/yore-mobile-mock.png"
-import HeroBg from "../assets/images/hero-bg.png"
+import { Image } from "astro:assets";
+import AppPreviewBg from "../assets/images/yore-mobile-mock.png";
+import HeroBg from "../assets/images/hero-bg.png";
 ---
 
-<section id="what-is-yore" class="relative min-h-screen bg-yore-dark flex items-center overflow-hidden py-32">
+<section
+  id="what-is-yore"
+  class="relative flex items-center min-h-screen py-32 overflow-hidden bg-yore-dark"
+>
   <!-- Background Map -->
-  <div class="absolute inset-0 bg-cover bg-center">
-    <Image src={HeroBg} alt="Hero Background" class="absolute inset-0 w-full h-full object-cover mix-blend-luminosity" />
-    <div class="absolute inset-0 bg-yore-dark/70 lg:bg-yore-dark/20 z-10" />
+  <div class="absolute inset-0 bg-center bg-cover">
+    <Image
+      src={HeroBg}
+      alt="Hero Background"
+      class="absolute inset-0 object-cover w-full h-full mix-blend-luminosity"
+    />
+    <div class="absolute inset-0 z-10 bg-yore-dark/70 lg:bg-yore-dark/20"></div>
   </div>
 
-  <div class="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+  <div
+    class="relative z-10 grid items-center gap-12 px-6 mx-auto max-w-7xl lg:grid-cols-2"
+  >
     <!-- Left Content -->
     <div>
-      <h2>
-        What is Yore?
-      </h2>
-      <div class=leading-relaxed">
+      <h2>What is Yore?</h2>
+      <div class='leading-relaxed"'>
         <p>
-          Yore is a social app designed for archaeology and history lovers.
-          Whether you're an amateur historian, a seasoned archaeologist, or
-          someone who simply enjoys visiting historical sites.
+          Yore is the intelligent platform for archaeology and history
+          enthusiasts.
+        </p>
+        <p>
+          Whether you're an amateur historian, professional archaeologist, or
+          weekend explorer, Yore transforms how you discover, analyze, and share
+          historical sites.
         </p>
         <p>
           You can stay current and share findings made in exploration with a
-          community of like-minded explorers. Chat to the "Yore-acle", an AI powered historian chatbot, document your visits with notes, photos, and GPS locations, and explore entries from other history
-          enthusiasts around the world.
+          community of like-minded explorers. Chat to the "Yore-acle", an AI
+          powered historian chatbot, document your visits with notes, photos,
+          and GPS locations, and explore entries from other history enthusiasts
+          around the world.
         </p>
       </div>
     </div>
-    <div class="flex justify-center lg:justify-end items-center">
-        <Image src={AppPreviewBg} alt="App Preview Background" class="mix-blend-normal w-3/4 h-auto" />
+    <div class="flex items-center justify-center lg:justify-end">
+      <Image
+        src={AppPreviewBg}
+        alt="App Preview Background"
+        class="w-3/4 h-auto mix-blend-normal"
+      />
     </div>
   </div>
 </section>
