@@ -40,8 +40,8 @@ return [
         'places_api_key' => env('GOOGLE_PLACES_API_KEY')
     ],
     'yoreoracle'=> [
-        'openai_api_uri' => env('OPENAI_API_URI'),
-        'openai_api_key' => env('OPENAI_API_KEY'),
-        'openai_model' => env('OPENAI_MODEL'),
+        'anthropic_api_uri' => env('ANTHROPIC_API_URI', 'https://api.anthropic.com/'),
+        'anthropic_api_key' => env('ANTHROPIC_API_KEY'),
+        'anthropic_model' => env('ANTHROPIC_MODEL', 'claude-3-5-sonnet-20241022'),
     ]
 ];

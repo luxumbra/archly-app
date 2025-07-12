@@ -30,6 +30,7 @@ class GooglePlacesService
         }
 
         $url = "{$this->endpoint}/places:searchText";
+        \Log::debug("Google Places API URL: " . $url);
 
         $params = [
             'textQuery' => $query,
@@ -54,7 +55,7 @@ class GooglePlacesService
             ]);
 
             $result = json_decode($response->getBody()->getContents(), true);
-            Redis::setex($cacheKey, 86400, json_encode($result)); // Cache for 24 hours
+            // Redis::setex($cacheKey, 86400, json_encode($result)); // Cache for 24 hours
 
             return $result;
 
@@ -67,9 +68,10 @@ class GooglePlacesService
     public function getPlaceDetails($placeId, $fields = '*', $noCache = false)
     {
         $cacheKey = "place_details_{$placeId}";
-        if (Redis::exists($cacheKey) && !$noCache) {
-            return json_decode(Redis::get($cacheKey), true);
-        }
+        // Temporarily disable Redis caching
+        // if (Redis::exists($cacheKey) && !$noCache) {
+        //     return json_decode(Redis::get($cacheKey), true);
+        // }
 
         try {
             $response = $this->client->get("{$this->endpoint}/places/{$placeId}", [
@@ -82,7 +84,7 @@ class GooglePlacesService
 
             $result = json_decode($response->getBody()->getContents(), true);
 
-            Redis::setex($cacheKey, 43200, json_encode($result));
+            // Redis::setex($cacheKey, 43200, json_encode($result));
 
             return $result;
 

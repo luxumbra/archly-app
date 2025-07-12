@@ -10,7 +10,6 @@ const MapView = () => {
   const [places, setPlaces] = useState([]);
   const [mapRef, setMapRef] = useState(null);
   const [error, setError] = useState(null);
-  const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const API_URI = process.env.NEXT_PUBLIC_API_URL;
 
   // Set the container style for a full-screen map
@@ -34,7 +33,15 @@ const MapView = () => {
           throw new Error('Failed to fetch places');
         }
         const data = await response.json();
-        setPlaces(data.places); // Assuming the API returns a `places` array
+        
+        // Handle both success and error responses
+        if (data.places && Array.isArray(data.places)) {
+          setPlaces(data.places);
+        } else if (data.error) {
+          throw new Error(data.error);
+        } else {
+          setPlaces([]);
+        }
       } catch (err) {
         setError(err.message);
       }
@@ -56,7 +63,7 @@ const MapView = () => {
         gestureHandling={'greedy'}
         disableDefaultUI={true}
       >
-        {places.length > 0 ? (
+        {places && places.length > 0 ? (
             places.map((place, index) => (
               <MapMarker key={place.id} location={place.location} title={place.displayName.text} id={place.id} />
             ))
