@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "deploy": "pnpm build && netlify deploy --prod --dir=dist",
-    "deploy:preview": "pnpm build && netlify deploy --dir=dist"
+    "deploy:preview": "pnpm build && netlify deploy --dir=dist",
+    "dev:email": "email dev --dir ./src/client/components/emails"
   },
   "keywords": [],
   "author": "",
@@ -40,5 +41,8 @@
     "sharp": "^0.34.2",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@react-email/preview-server": "4.1.1"
   }
 }

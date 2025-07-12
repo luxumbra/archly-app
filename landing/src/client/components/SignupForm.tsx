@@ -1,8 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 
 import type { FormEvent } from "react";
-import { constants } from "../../contants";
+import { constants } from "../../constants.ts";
 
 interface MessageState {
   text: string;
@@ -11,6 +11,7 @@ interface MessageState {
 
 export default function SignupForm() {
   const [email, setEmail] = useState("");
+  const [newsletter, setNewsletter] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<MessageState>({
     text: "",
@@ -44,7 +45,8 @@ export default function SignupForm() {
     try {
       const formData = new FormData();
       formData.append("email", email);
-      formData.append("cf-turnstile-response", turnstileToken);
+        formData.append("cf-turnstile-response", turnstileToken);
+      formData.append("newsletter", newsletter.toString());
 
       const response = await fetch("/api/newsletter", {
         method: "POST",
@@ -80,16 +82,21 @@ export default function SignupForm() {
       className="flex flex-col items-center justify-center max-w-md gap-4 mx-auto newsletter-form"
     >
       <div className="flex items-center justify-center gap-2 form-group">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email address"
-          required
-          className="flex-1 px-4 py-3 text-white placeholder-gray-400 bg-gray-700 border border-gray-600 rounded-lg email-input focus:border-yore-primary focus:outline-none"
-          disabled={isLoading}
-          autoComplete="email"
-        />
+        <div className="flex items-center gap-2">
+          <input
+            type="email"
+            value={email}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
+            placeholder="Enter your email address"
+            required
+            className="flex-1 px-4 py-3 text-white placeholder-gray-400 bg-gray-700 border border-gray-600 rounded-lg email-input focus:border-yore-primary focus:outline-none"
+            disabled={isLoading}
+            autoComplete="email"
+          />
+
+        </div>
         <button
           type="submit"
           disabled={isLoading || !turnstileToken}
@@ -98,6 +105,14 @@ export default function SignupForm() {
           {isLoading ? "Signing up..." : "Sign up"}
         </button>
       </div>
+      <div className="flex items-start text-center gap-2">
+            <label htmlFor="newsletter" className="flex items-center gap-2  text-xs text-gray-400">
+              <span>
+                Send me Yore updates and our monthly archaeology newsletter
+              </span>
+              <input type="checkbox" id="newsletter" name="newsletter" checked={newsletter} onChange={(e) => setNewsletter(e.target.checked)} />
+            </label>
+          </div>
 
       {/* Turnstile Widget */}
       <div className="flex justify-center mb-4">

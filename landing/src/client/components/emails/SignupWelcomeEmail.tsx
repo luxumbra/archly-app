@@ -14,10 +14,11 @@ import {
   Link,
 } from "@react-email/components";
 
-import { EmailHeader, EmailHeading, EmailTailwind } from "./emails";
+import { EmailHeader, EmailHeading, EmailTailwind } from "./shared";
 
 interface EmailTemplateProps {
   email: string;
+  newsletter: boolean;
 }
 
 /**
@@ -25,7 +26,7 @@ interface EmailTemplateProps {
  * @param props - The props for the email
  * @returns The email component
  */
-function SignupWelcomeEmailTemplate({ email }: EmailTemplateProps) {
+function SignupWelcomeEmailTemplate({ email, newsletter }: EmailTemplateProps) {
   return (
     <EmailTailwind>
       <Html className="font-sans bg-secondary-background">
@@ -44,14 +45,19 @@ function SignupWelcomeEmailTemplate({ email }: EmailTemplateProps) {
               We&apos;re building something special for archaeology and history
               lovers like yourself. You&apos;ll be among the first to know when
               we launch our beta version in 2025.
-            </Text>
+                      </Text>
+                      {newsletter && (
+                        <Text className="mt-2 text-center text-[#A8B0A3]">
+                          As you registered interest in our newsletter, we will update you on our progress and launch date. As a subscriber (an early bird too) you'll also receive our monthly newsletter and some perks when the app launches.
+                        </Text>
+                      )}
           </Container>
 
           {/* Footer */}
           <Section className="p-6 mt-10 bg-[#18181b]">
             <Text className="text-sm text-center text-[#A8B0A3]">
               If you have any questions, reply to this email or contact our
-              support team at hello@yore.earth.
+              support team at halp@yore.earth.
             </Text>
 
             <Text className="mt-4 text-xs text-center text-gray-400">
@@ -79,4 +85,4 @@ export { signupWelcomeEmail };
  * Order placed email
  * @example This is a mock email for testing purposes.
  */
-export default () => <SignupWelcomeEmailTemplate email={"dave@yore.earth"} />;
+export default () => <SignupWelcomeEmailTemplate email={"dave@yore.earth"} newsletter={true} />;

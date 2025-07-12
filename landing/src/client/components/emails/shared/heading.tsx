@@ -6,7 +6,7 @@ export default function EmailHeading({
   children: React.ReactNode;
 }) {
   return (
-    <Heading className="text-2xl font-bold text-center text-[#B87333]">
+    <Heading className="text-2xl font-bold text-center text-[var(--yore-primary)]">
       {children}
     </Heading>
   );

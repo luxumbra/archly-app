@@ -6,7 +6,7 @@ export default function EmailHeader() {
       <Row>
         <Column className="w-[80%]">
           <Img
-            src="https://cdn.boughandburrow.uk/static/FullLogo.png"
+            src="https://cdn.yore.earth/assets/images/yore-logo.png"
             alt="Bough & Burrow Logo"
             className="h-20"
           />

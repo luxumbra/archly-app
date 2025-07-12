@@ -5,7 +5,9 @@
     "jsxImportSource": "react",
     "module": "ESNext",
     "target": "ESNext",
-    "moduleResolution": "nodenext",
-    "types": ["astro/client"]
+    "moduleResolution": "bundler",
+    "types": ["astro/client", "react", "react-dom"],
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   }
 }

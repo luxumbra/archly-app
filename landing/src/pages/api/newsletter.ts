@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { Resend } from "resend";
-import { signupWelcomeEmail } from "../../client/components/SignupWelcomeEmail";
-import { constants } from "../../contants";
+import { signupWelcomeEmail } from "../../client/components/emails/SignupWelcomeEmail";
+import { constants } from "../../constants";
 
 export const prerender = false;
 
@@ -47,12 +47,14 @@ async function verifyTurnstileToken(
 
 const POST: APIRoute = async ({ request }) => {
   const resend = new Resend(constants.RESEND_API_KEY);
+  const resendActions = new Resend(constants.RESEND_ACTIONS_KEY);
   try {
     console.log("=== API Request Debug ===");
 
     const data = await request.formData();
     const email = data.get("email") as string;
     const turnstileToken = data.get("cf-turnstile-response") as string;
+    const newsletter = data.get("newsletter") === "true";
 
     console.log("Email received:", email);
     console.log(
@@ -95,14 +97,7 @@ const POST: APIRoute = async ({ request }) => {
         }
       );
     }
-    console.log(
-      "Secret key loaded:",
-      process.env.TURNSTILE_SECRET_KEY ? "Yes" : "No"
-    );
-    console.log(
-      "Secret key length:",
-      import.meta.env.TURNSTILE_SECRET_KEY?.length
-    );
+
     console.log("✅ All required fields are present");
 
     // Verify Turnstile token
@@ -127,7 +122,7 @@ const POST: APIRoute = async ({ request }) => {
       );
     }
     console.log("✅ Turnstile token verified successfully");
-    console.log("Test signup:", email);
+    console.log("Test signup:", email, newsletter);
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -143,8 +138,16 @@ const POST: APIRoute = async ({ request }) => {
         from: "Yore <hello@updates.yore.earth>",
         to: email,
         subject: "Welcome to Yore - Your Archaeological Journey Begins!",
-        react: signupWelcomeEmail({ email }),
+        react: signupWelcomeEmail({ email, newsletter }),
       });
+
+    if (newsletter) {
+      await resendActions.contacts.create({
+        email: email,
+        audienceId: constants.RESEND_AUDIENCE_ID,
+        unsubscribed: false,
+      });
+    }
 
     // Optional: Send notification to yourself
     const { data: adminNewSignupData, error: adminNewSignupError } =
