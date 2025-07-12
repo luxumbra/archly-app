@@ -39,18 +39,20 @@ function SignupWelcomeEmailTemplate({ email, newsletter }: EmailTemplateProps) {
           {/* Thank You Message */}
           <Container className="p-6">
             <EmailHeading>
-              Thank you for registering interest in our little project!
+              Thank you for registering interest in our little project, Yore!
             </EmailHeading>
             <Text className="mt-2 text-center text-[#A8B0A3]">
               We&apos;re building something special for archaeology and history
-              lovers like yourself. You&apos;ll be among the first to know when
-              we launch our beta version in 2025.
-                      </Text>
-                      {newsletter && (
-                        <Text className="mt-2 text-center text-[#A8B0A3]">
-                          As you registered interest in our newsletter, we will update you on our progress and launch date. As a subscriber (an early bird too) you'll also receive our monthly newsletter and some perks when the app launches.
-                        </Text>
-                      )}
+              lovers like yourself and you&apos;ll be among the first to know
+              when we launch our beta version in 2025.
+            </Text>
+            {newsletter && (
+              <Text className="mt-2 text-center text-[#A8B0A3]">
+                As a subscriber (an early bird too) you'll also receive our
+                monthly newsletter and some perks when the app launches. Welcome
+                to the Yore community!
+              </Text>
+            )}
           </Container>
 
           {/* Footer */}
@@ -85,4 +87,6 @@ export { signupWelcomeEmail };
  * Order placed email
  * @example This is a mock email for testing purposes.
  */
-export default () => <SignupWelcomeEmailTemplate email={"dave@yore.earth"} newsletter={true} />;
+export default () => (
+  <SignupWelcomeEmailTemplate email={"dave@yore.earth"} newsletter={true} />
+);

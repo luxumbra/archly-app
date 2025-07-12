@@ -11,10 +11,10 @@ export default function EmailTailwind({
         theme: {
           extend: {
             colors: {
-              "primary-background": "#18181b",
-              "secondary-background": "#a8b0a3",
-              primary: "#b87333",
-              secondary: "#a8b0a3",
+              "primary-background": "#1F2732",
+              "secondary-background": "#7A8EC4",
+              primary: "#7B8C55",
+              secondary: "#7A8EC4",
             },
           },
         },

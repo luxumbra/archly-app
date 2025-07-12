@@ -1,4 +1,7 @@
 import { Section, Row, Column, Img, Link } from "@react-email/components";
+import { constants } from "../../../../constants";
+
+const socials = constants.SOCIALS;
 
 export default function EmailHeader() {
   return (
@@ -7,14 +10,14 @@ export default function EmailHeader() {
         <Column className="w-[80%]">
           <Img
             src="https://cdn.yore.earth/assets/images/yore-logo.png"
-            alt="Bough & Burrow Logo"
+            alt="Yore Logo"
             className="h-20"
           />
         </Column>
         <Column align="right">
           <Row align="right">
             <Column>
-              <Link href="#">
+              <Link href={socials.x}>
                 <Img
                   alt="X"
                   className="mx-[4px]"
@@ -25,7 +28,7 @@ export default function EmailHeader() {
               </Link>
             </Column>
             <Column>
-              <Link href="#">
+              <Link href={socials.instagram}>
                 <Img
                   alt="Instagram"
                   className="mx-[4px]"
@@ -36,7 +39,7 @@ export default function EmailHeader() {
               </Link>
             </Column>
             <Column>
-              <Link href="#">
+              <Link href={socials.facebook}>
                 <Img
                   alt="Facebook"
                   className="mx-[4px]"
