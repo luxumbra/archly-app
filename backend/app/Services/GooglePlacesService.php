@@ -55,7 +55,7 @@ class GooglePlacesService
             ]);
 
             $result = json_decode($response->getBody()->getContents(), true);
-            // Redis::setex($cacheKey, 86400, json_encode($result)); // Cache for 24 hours
+            Redis::setex($cacheKey, 86400, json_encode($result)); // Cache for 24 hours
 
             return $result;
 
@@ -68,10 +68,14 @@ class GooglePlacesService
     public function getPlaceDetails($placeId, $fields = '*', $noCache = false)
     {
         $cacheKey = "place_details_{$placeId}";
-        // Temporarily disable Redis caching
-        // if (Redis::exists($cacheKey) && !$noCache) {
-        //     return json_decode(Redis::get($cacheKey), true);
-        // }
+        if (Redis::exists($cacheKey) && !$noCache) {
+            return json_decode(Redis::get($cacheKey), true);
+        }
+
+        // Use a sensible default if fields is '*' or empty
+        if ($fields === '*' || empty($fields)) {
+            $fields = 'displayName,formattedAddress,location,id,rating,addressComponents';
+        }
 
         try {
             $response = $this->client->get("{$this->endpoint}/places/{$placeId}", [
@@ -84,7 +88,7 @@ class GooglePlacesService
 
             $result = json_decode($response->getBody()->getContents(), true);
 
-            // Redis::setex($cacheKey, 43200, json_encode($result));
+            Redis::setex($cacheKey, 43200, json_encode($result));
 
             return $result;
 

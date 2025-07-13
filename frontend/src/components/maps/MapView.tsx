@@ -10,7 +10,7 @@ interface MapViewProps {
     initialLocation?: Location
 }
 
-const MapView = ({ 
+const MapView = ({
     initialQuery = 'ancient+monuments+in+england',
     initialLocation = { latitude: 55.9533, longitude: -3.1883 }
 }: MapViewProps) => {
@@ -37,13 +37,13 @@ const MapView = ({
                 const response = await fetch(
                     `${API_URI}/places/search?query=${initialQuery}&fields=places.displayName,places.formattedAddress,places.id,places.location`
                 )
-                
+
                 if (!response.ok) {
                     throw new Error('Failed to fetch places')
                 }
-                
+
                 const data: PlacesSearchResponse = await response.json()
-                
+
                 // Handle both success and error responses
                 if (data.places && Array.isArray(data.places)) {
                     setPlaces(data.places)
@@ -56,7 +56,7 @@ const MapView = ({
                 setError(err instanceof Error ? err.message : 'An error occurred')
             }
         }
-        
+
         fetchPlaces()
     }, [API_URI, initialQuery])
 
@@ -76,11 +76,11 @@ const MapView = ({
                 >
                     {places && places.length > 0 ? (
                         places.map((place) => (
-                            <MapMarker 
-                                key={place.id} 
-                                location={place.location} 
-                                title={place.displayName.text} 
-                                id={place.id} 
+                            <MapMarker
+                                key={place.id}
+                                location={place.location}
+                                title={place.displayName.text}
+                                id={place.id}
                             />
                         ))
                     ) : (

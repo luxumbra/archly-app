@@ -37,17 +37,28 @@ class PlaceDataAggregatorService
         } catch (\Exception $e) {
             $placeDetails = ['error' => 'Failed to fetch place details from Google Places'];
         }
+
+        // Check if placeDetails has an error or is missing required fields
+        if (isset($placeDetails['error']) || !isset($placeDetails['displayName'])) {
+            Log::error('Google Places API error or invalid response', $placeDetails);
+            return [
+                'placesData' => $placeDetails,
+                'aiData' => null,
+            ];
+        }
+
         if ($placeDetails) {
             $placeName = $placeDetails['displayName']['text'];
-            $address = $placeDetails['addressComponents'];
+            $address = $placeDetails['addressComponents'] ?? [];
             $location = $this->addressService->getPostalTown($address);
             Log::info($placeDetails['displayName']['text'].', '.$location);
 
             try {
-                // Fetch Wikipedia details
+                // Fetch AI details
                 $aiDetails = $this->yoreOracleService->getPlaceDetails($placeName, $location, $noCache);
             } catch (\Exception $e) {
-                $aiDetails = ['error' => 'Failed to fetch data from OpenAI'];
+                Log::error('YoreOracle API error: ' . $e->getMessage());
+                $aiDetails = ['error' => 'Failed to fetch data from AI service'];
             }
             Log::info($aiDetails);
         }

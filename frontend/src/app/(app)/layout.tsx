@@ -18,7 +18,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-yore-dark">
             <Navigation user={user as User} />
             <main>{children}</main>
         </div>

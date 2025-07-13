@@ -25,10 +25,15 @@ export interface PlaceData {
   primaryType: string;
   formattedAddress: string;
   rating?: number;
+  location?: Location;
 }
 
 export interface ParsedAiData {
   geoLocation?: Location;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
   ordnanceSurveyGridReference?: string;
   historicalSignificance?: string;
   phasesOfConstruction?: Array<{

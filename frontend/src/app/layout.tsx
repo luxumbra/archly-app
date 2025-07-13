@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
-import { Nunito } from 'next/font/google'
+import { Playfair_Display, Open_Sans } from 'next/font/google'
 import { ThemeModeScript } from "flowbite-react";
-import LoginLinks from '@/components/LoginLinks'
+import AppHeader from '@/components/AppHeader'
 import "./globals.css";
 
-const nunitoFont = Nunito({
+const playfairFont = Playfair_Display({
+    subsets: ['latin'],
+    display: 'swap',
+})
+const openSansFont = Open_Sans({
     subsets: ['latin'],
     display: 'swap',
 })
@@ -20,13 +24,13 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
     return (
-        <html lang="en" className={nunitoFont.className}>
+        <html lang="en" className={`${playfairFont.className} ${openSansFont.className}`}>
             <head>
                 <ThemeModeScript />
             </head>
             <body className="antialiased">
-                <div className="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-transparent sm:items-center sm:pt-0">
-                    <LoginLinks />
+                <AppHeader />
+                <div className="w-full">
                     {children}
                 </div>
             </body>

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import axios from 'axios'
 import SiteDetailMap from '@/components/maps/SiteDetailMap'
@@ -20,48 +20,74 @@ const SiteDetailPage = () => {
     const [error, setError] = useState<string | null>(null)
     const API_URL = process.env.NEXT_PUBLIC_API_URL
 
-    useEffect(() => {
-        if (id) {
-            const fetchPlaceDetails = async () => {
-                try {
-                    setLoading(true)
-                    const response = await axios.get(
-                        `${API_URL}/place/details`,
-                        {
-                            params: {
-                                place_id: id,
-                                fields: '*',
-                            },
-                        },
-                    )
+    const fetchPlaceDetails = useCallback(async () => {
+        if (!id) return
 
-                    const { data } = response
-                    let parsedAiData
+        try {
+            setLoading(true)
+            setError(null)
 
-                    try {
-                        if (data.aiData && typeof data.aiData === 'string') {
-                            parsedAiData = JSON.parse(data.aiData)
-                        } else {
-                            parsedAiData = data.aiData || {}
-                        }
-                    } catch (error) {
-                        console.error('Error parsing aiData', error)
-                        parsedAiData = {}
-                    }
-                    setPlace({
-                        ...data,
-                        parsedAiData,
-                    })
-                    setLoading(false)
-                } catch {
-                    setError('Failed to fetch place details')
-                    setLoading(false)
+            const response = await axios.get(
+                `${API_URL}/place/details`,
+                {
+                    params: {
+                        place_id: id,
+                        fields: '*',
+                    },
+                },
+            )
+
+            const { data } = response
+            let parsedAiData
+
+            try {
+                if (data.aiData && typeof data.aiData === 'string') {
+                    parsedAiData = JSON.parse(data.aiData)
+                } else {
+                    parsedAiData = data.aiData || {}
                 }
+            } catch (parseError) {
+                console.error('Error parsing aiData', parseError)
+                parsedAiData = {}
             }
 
-            fetchPlaceDetails()
+            // Map AI response fields to expected frontend fields
+            const mappedAiData = {
+                historicalSignificance: parsedAiData.historical_significance,
+                culturalContext: parsedAiData.cultural_heritage,
+                geoLocation: parsedAiData.coordinates ? {
+                    latitude: parsedAiData.coordinates.lat,
+                    longitude: parsedAiData.coordinates.lng
+                } : undefined,
+                coordinates: parsedAiData.coordinates,
+                ordnanceSurveyGridReference: parsedAiData.grid_reference,
+                visitorInformation: {
+                    openingTimes: parsedAiData.opening_times,
+                    admissionFees: parsedAiData.admission_fees,
+                    officialWebsite: parsedAiData.official_website,
+                    googleMapsLink: parsedAiData.google_maps_link
+                },
+                relatedLinks: parsedAiData.google_maps_link ? [{
+                    title: 'Google Maps',
+                    url: parsedAiData.google_maps_link
+                }] : []
+            }
+
+            setPlace({
+                ...data,
+                parsedAiData: mappedAiData,
+            })
+        } catch (fetchError) {
+            console.error('Failed to fetch place details:', fetchError)
+            setError('Failed to fetch place details')
+        } finally {
+            setLoading(false)
         }
     }, [id, API_URL])
+
+    useEffect(() => {
+        fetchPlaceDetails()
+    }, [fetchPlaceDetails])
 
     if (loading)
         return (
@@ -86,7 +112,7 @@ const SiteDetailPage = () => {
         <div className="w-full min-h-screen flex flex-col items-center justify-start">
             <div className="w-full h-[66vh] z-0">
                 <SiteDetailMap
-                    location={place.parsedAiData.geoLocation}
+                    location={place.placesData.location}
                     title={place.placesData.displayName.text}
                     id={id || undefined}
                 />
@@ -101,11 +127,17 @@ const SiteDetailPage = () => {
                 <div className="flex flex-row flex-wrap items-start justify-between w-full gap-3">
                     <div>
                         <p>Address: {place.placesData.formattedAddress}</p>
-                        {place.parsedAiData.geoLocation ? (
+                        {place.placesData.location ? (
                             <p>
                                 Location: lat:{' '}
-                                {place.parsedAiData.geoLocation.latitude} lng:{' '}
-                                {place.parsedAiData.geoLocation.longitude}
+                                {place.placesData.location.latitude} lng:{' '}
+                                {place.placesData.location.longitude}
+                            </p>
+                        ) : place.parsedAiData.coordinates ? (
+                            <p>
+                                Location: lat:{' '}
+                                {place.parsedAiData.coordinates.lat} lng:{' '}
+                                {place.parsedAiData.coordinates.lng}
                             </p>
                         ) : null}
                         {place.parsedAiData.ordnanceSurveyGridReference ? (
