@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { Location } from '@/types'
 
 interface SearchRadiusCircleProps {
@@ -10,36 +10,31 @@ interface SearchRadiusCircleProps {
 }
 
 const SearchRadiusCircle = ({ center, radius, visible, zoomLevel = 10 }: SearchRadiusCircleProps) => {
-    const [circleSize, setCircleSize] = useState(500)
-
-    useEffect(() => {
-        if (!visible) return
+    // Memoise the expensive circle size calculation
+    const circleSize = useMemo(() => {
+        if (!visible) return 0
 
         // Calculate the actual pixel size for the radius based on zoom level
         // This is an approximation - the exact calculation depends on the map projection
-        const calculateCircleSize = () => {
-            // Earth's circumference is about 40,075 km
-            // At zoom level 0, the world is 256 pixels wide
-            // Each zoom level doubles the scale
-            const worldCircumference = 40075000 // meters
-            const pixelsAtZoom0 = 256
-            const scaleAtZoom = pixelsAtZoom0 * Math.pow(2, zoomLevel)
+        // Earth's circumference is about 40,075 km
+        // At zoom level 0, the world is 256 pixels wide
+        // Each zoom level doubles the scale
+        const worldCircumference = 40075000 // meters
+        const pixelsAtZoom0 = 256
+        const scaleAtZoom = pixelsAtZoom0 * Math.pow(2, zoomLevel)
 
-            // Calculate how many pixels represent our radius
-            const pixelsPerMeter = scaleAtZoom / worldCircumference
-            const radiusInPixels = radius * pixelsPerMeter
+        // Calculate how many pixels represent our radius
+        const pixelsPerMeter = scaleAtZoom / worldCircumference
+        const radiusInPixels = radius * pixelsPerMeter
 
-            // Adjust for latitude (mercator projection distortion)
-            const latitudeRadians = center.latitude * Math.PI / 180
-            const latitudeAdjustment = 1 / Math.cos(latitudeRadians)
-            const adjustedSize = radiusInPixels * latitudeAdjustment
+        // Adjust for latitude (mercator projection distortion)
+        const latitudeRadians = center.latitude * Math.PI / 180
+        const latitudeAdjustment = 1 / Math.cos(latitudeRadians)
+        const adjustedSize = radiusInPixels * latitudeAdjustment
 
-            console.log('SearchRadiusCircle: Calculated size:', adjustedSize, 'px for', radius, 'meters at zoom', zoomLevel)
-            setCircleSize(Math.max(50, Math.min(1000, adjustedSize))) // Clamp between 50-1000px
-        }
-
-        calculateCircleSize()
-    }, [center, radius, visible, zoomLevel])
+        console.log('SearchRadiusCircle: Calculated size:', adjustedSize, 'px for', radius, 'meters at zoom', zoomLevel)
+        return Math.max(50, Math.min(1000, adjustedSize)) // Clamp between 50-1000px
+    }, [center.latitude, center.longitude, radius, visible, zoomLevel])
 
     console.log('SearchRadiusCircle render:', { center, radius, visible, circleSize, zoomLevel })
 

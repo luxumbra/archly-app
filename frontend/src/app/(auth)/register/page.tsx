@@ -52,8 +52,8 @@ const RegisterPage = () => {
             </div>
 
             {/* Email Address */}
-            <div className="mt-4">
-                <Label htmlFor="email">Email</Label>
+            <div className="mt-4 text-gray-300">
+                <Label htmlFor="email" className="text-gray-300">Email</Label>
 
                 <Input
                     id="email"
@@ -68,8 +68,8 @@ const RegisterPage = () => {
             </div>
 
             {/* Password */}
-            <div className="mt-4">
-                <Label htmlFor="password">Password</Label>
+            <div className="mt-4 text-gray-300">
+                <Label htmlFor="password" className="text-gray-300">Password</Label>
 
                 <Input
                     id="password"
@@ -85,8 +85,8 @@ const RegisterPage = () => {
             </div>
 
             {/* Confirm Password */}
-            <div className="mt-4">
-                <Label htmlFor="passwordConfirmation">
+            <div className="mt-4 text-gray-300">
+                <Label htmlFor="passwordConfirmation" className="text-gray-300">
                     Confirm Password
                 </Label>
 
@@ -110,7 +110,7 @@ const RegisterPage = () => {
             <div className="flex items-center justify-end mt-4">
                 <Link
                     href="/login"
-                    className="underline text-sm text-gray-600 hover:text-gray-900">
+                    className="underline text-sm text-gray-300 hover:text-gray-900">
                     Already registered?
                 </Link>
 

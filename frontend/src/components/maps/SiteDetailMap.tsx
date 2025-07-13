@@ -31,11 +31,12 @@ const SiteDetailMap = ({ location, title, id }: SiteDetailMapProps) => {
                         lat: location.latitude,
                         lng: location.longitude,
                     }}
-                    defaultZoom={12}
+                    defaultZoom={18}
                     gestureHandling={'greedy'}
                     disableDefaultUI={true}
-                    mapId="site-detail-map"
-                    styles={yoreMapStyle}>
+                    mapId="6899f89edbf4a393d05523a5"
+                    mapTypeId="satellite"
+                    >
                     <MapMarker location={location} title={title || 'Unknown Site'} id={id || ''} />
                 </Map>
             </MapProvider>

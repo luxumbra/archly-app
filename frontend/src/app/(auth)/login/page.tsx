@@ -25,7 +25,7 @@ const LoginPage = () => {
         // Check for reset status in router query
         const searchParams = new URLSearchParams(window.location.search)
         const reset = searchParams.get('reset')
-        
+
         if (reset && Object.keys(errors).length === 0) {
             try {
                 setStatus(atob(reset))
@@ -71,7 +71,7 @@ const LoginPage = () => {
                 </div>
 
                 {/* Password */}
-                <div className="mt-4">
+                <div className="mt-4 text-gray-300">
                     <Label htmlFor="password">Password</Label>
 
                     <Input
@@ -105,7 +105,7 @@ const LoginPage = () => {
                             }
                         />
 
-                        <span className="ml-2 text-sm text-gray-600">
+                        <span className="ml-2 text-sm text-gray-300">
                             Remember me
                         </span>
                     </label>
@@ -114,7 +114,7 @@ const LoginPage = () => {
                 <div className="flex items-center justify-end mt-4">
                     <Link
                         href="/forgot-password"
-                        className="underline text-sm text-gray-600 hover:text-gray-900">
+                        className="underline text-sm text-gray-300 hover:text-gray-500">
                         Forgot your password?
                     </Link>
 

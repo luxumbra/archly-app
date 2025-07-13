@@ -28,7 +28,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <head>
                 <ThemeModeScript />
             </head>
-            <body className="antialiased">
+            <body className="antialiased bg-yore-dark">
                 <AppHeader />
                 <div className="w-full">
                     {children}

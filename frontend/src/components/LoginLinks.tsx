@@ -11,7 +11,7 @@ const LoginLinks = () => {
             {user ? (
                 <Link
                     href="/dashboard"
-                    className="text-sm text-gray-700 hover:text-gray-900 transition-colors"
+                    className="text-sm text-gray-200 hover:text-gray-500 transition-colors"
                 >
                     Dashboard
                 </Link>
@@ -19,7 +19,7 @@ const LoginLinks = () => {
                 <>
                     <Link
                         href="/login"
-                        className="text-sm text-gray-700 hover:text-gray-900 transition-colors"
+                        className="text-sm text-gray-200 hover:text-gray-500 transition-colors"
                     >
                         Login
                     </Link>

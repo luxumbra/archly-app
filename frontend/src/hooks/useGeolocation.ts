@@ -31,6 +31,8 @@ export const useGeolocation = (options: UseGeolocationOptions = {}) => {
   } = options
 
   const requestLocation = () => {
+    console.log('requestLocation called')
+    
     if (!navigator.geolocation) {
       setState(prev => ({
         ...prev,
@@ -41,10 +43,12 @@ export const useGeolocation = (options: UseGeolocationOptions = {}) => {
       return
     }
 
+    console.log('Setting loading state and requesting position...')
     setState(prev => ({ ...prev, loading: true, error: null }))
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        console.log('Geolocation success:', position)
         setState(prev => ({
           ...prev,
           location: {
@@ -57,19 +61,21 @@ export const useGeolocation = (options: UseGeolocationOptions = {}) => {
         }))
       },
       (error) => {
+        console.log('Geolocation error:', error)
         let errorMessage = 'Failed to get location'
         let permission: GeolocationState['permission'] = 'denied'
 
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            errorMessage = 'Location access denied by user'
+            errorMessage = 'Location access denied. Please enable location services in your browser settings.'
             permission = 'denied'
             break
           case error.POSITION_UNAVAILABLE:
-            errorMessage = 'Location information unavailable'
+            errorMessage = 'Location information unavailable. Please check that location services are enabled.'
+            permission = 'denied'
             break
           case error.TIMEOUT:
-            errorMessage = 'Location request timed out'
+            errorMessage = 'Location request timed out. Please try again.'
             break
         }
 
@@ -90,16 +96,21 @@ export const useGeolocation = (options: UseGeolocationOptions = {}) => {
 
   // Check initial permission state (but don't auto-request location)
   useEffect(() => {
-    if ('permissions' in navigator) {
+    if (typeof window !== 'undefined' && 'permissions' in navigator) {
       navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+        console.log('Geolocation permission state:', result.state)
         setState(prev => ({
           ...prev,
           permission: result.state as GeolocationState['permission']
         }))
-      }).catch(() => {
+      }).catch((error) => {
+        console.log('Permission query failed, defaulting to prompt:', error)
         // Fallback if permissions API not available
         setState(prev => ({ ...prev, permission: 'prompt' }))
       })
+    } else {
+      // Fallback for environments without permissions API
+      setState(prev => ({ ...prev, permission: 'prompt' }))
     }
   }, [])
 
