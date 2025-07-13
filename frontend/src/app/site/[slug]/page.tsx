@@ -89,6 +89,17 @@ const SiteDetailPage = () => {
         fetchPlaceDetails()
     }, [fetchPlaceDetails])
 
+    // Debug logging for map data
+    useEffect(() => {
+        if (place) {
+            console.log('SiteDetailPage: Place data loaded:', {
+                placesDataLocation: place.placesData.location,
+                parsedAiDataGeoLocation: place.parsedAiData.geoLocation,
+                finalLocation: place.placesData.location || place.parsedAiData.geoLocation
+            })
+        }
+    }, [place])
+
     if (loading)
         return (
             <div className="flex items-center justify-center h-screen w-full">
@@ -112,7 +123,7 @@ const SiteDetailPage = () => {
         <div className="w-full min-h-screen flex flex-col items-center justify-start">
             <div className="w-full h-[66vh] z-0">
                 <SiteDetailMap
-                    location={place.placesData.location}
+                    location={place.placesData.location || place.parsedAiData.geoLocation}
                     title={place.placesData.displayName.text}
                     id={id || undefined}
                 />

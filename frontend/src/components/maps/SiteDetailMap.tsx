@@ -2,6 +2,7 @@ import MapProvider from '@/providers/MapProvider'
 import { Map } from '@vis.gl/react-google-maps'
 import MapMarker from '@/components/maps/MapMarker'
 import { SiteDetailMapProps } from '@/types'
+import { yoreMapStyle } from '@/utils/mapStyles'
 
 const SiteDetailMap = ({ location, title, id }: SiteDetailMapProps) => {
     const containerStyle = {
@@ -11,12 +12,15 @@ const SiteDetailMap = ({ location, title, id }: SiteDetailMapProps) => {
 
     // Don't render map if location data is missing or invalid
     if (!location || typeof location.latitude === 'undefined' || typeof location.longitude === 'undefined') {
+        console.log('SiteDetailMap: Location data missing or invalid:', location)
         return (
             <div className="relative text-black w-full h-full flex items-center justify-center z-0 bg-gray-100">
                 <div className="text-gray-600">Location not available for this site</div>
             </div>
         )
     }
+
+    console.log('SiteDetailMap: Rendering map with location:', location)
 
     return (
         <div className="relative text-black w-full h-full flex items-center justify-center z-0">
@@ -29,7 +33,9 @@ const SiteDetailMap = ({ location, title, id }: SiteDetailMapProps) => {
                     }}
                     defaultZoom={12}
                     gestureHandling={'greedy'}
-                    disableDefaultUI={true}>
+                    disableDefaultUI={true}
+                    mapId="site-detail-map"
+                    styles={yoreMapStyle}>
                     <MapMarker location={location} title={title || 'Unknown Site'} id={id || ''} />
                 </Map>
             </MapProvider>

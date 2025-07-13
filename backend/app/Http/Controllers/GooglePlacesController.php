@@ -20,11 +20,25 @@ class GooglePlacesController extends Controller
     public function textSearch(Request $request)
     {
         $query = $request->query('query');  // Get search query from request
-        $location = explode(',', $request->query('location', '55.9533,-3.1883')); // Optional
+        $locationString = $request->query('location', '55.9533,-3.1883');
+        $location = explode(',', $locationString); // Optional
         $fields = $request->input('fields', 'places.displayName,places.formattedAddress'); // Default fields
         $radius = $request->query('radius', 10000);
         $nextPageToken = $request->query('nextPageToken', null);
         $noCache = $request->input('noCache', false);
+
+        // Validate location array has exactly 2 numeric values
+        if (count($location) !== 2 || !is_numeric($location[0]) || !is_numeric($location[1])) {
+            return response()->json(['error' => 'Invalid location format. Expected: latitude,longitude'], 400);
+        }
+
+        // Convert to floats to ensure proper type
+        $location = [(float)$location[0], (float)$location[1]];
+
+        // Validate latitude and longitude ranges
+        if ($location[0] < -90 || $location[0] > 90 || $location[1] < -180 || $location[1] > 180) {
+            return response()->json(['error' => 'Invalid latitude/longitude values'], 400);
+        }
 
         $response = $this->googlePlacesService->textSearch($query, $fields, $location, $noCache, $radius, $nextPageToken);
 

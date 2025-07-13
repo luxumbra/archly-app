@@ -27,7 +27,30 @@ export const useAuth = ({
     data: user,
     error,
     mutate,
-  } = useSWR<User>("/user", () => axios.get<User>("/user").then(res => res.data));
+  } = useSWR<User>(
+    "/user", 
+    async () => {
+      try {
+        const response = await axios.get<User>("/user");
+        return response.data;
+      } catch (error: unknown) {
+        // Don't throw 401 errors - just return null for unauthenticated users
+        if (error && typeof error === 'object' && 'response' in error && 
+            error.response && typeof error.response === 'object' && 
+            'status' in error.response && error.response.status === 401) {
+          return null;
+        }
+        throw error;
+      }
+    },
+    {
+      shouldRetryOnError: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      errorRetryCount: 0,
+      dedupingInterval: 60000, // Cache for 1 minute
+    }
+  );
 
   const csrf = () => axios.get("/sanctum/csrf-cookie");
 
