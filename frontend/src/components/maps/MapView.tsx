@@ -2,16 +2,17 @@
 import { Map } from "@vis.gl/react-google-maps";
 import { useState, useEffect, useCallback, useRef } from "react";
 import ClusteredMapMarkers from "@/components/maps/ClusteredMapMarkers";
-import MapMarker from "@/components/maps/MapMarker";
 import { AdvancedMarker } from "@vis.gl/react-google-maps";
 import SearchRadiusCircle from "@/components/maps/SearchRadiusCircle";
 import MapProvider from "@/providers/MapProvider";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { Place, PlacesSearchResponse, Location } from "@/types";
-import { yoreMapStyle } from "@/utils/mapStyles";
 import { useYoreAssetProgress } from "@/hooks/useYoreAssetProgress";
 import { YoreLoader } from "../Loading";
 import { Icon } from "@iconify/react";
+import TextSearch from "@/components/TextSearch";
+import useSearchCache from "@/hooks/useSearchCache";
+import { geocodeWithFallback } from "@/utils/geocoding";
 
 interface MapViewProps {
   initialQuery?: string;
@@ -33,17 +34,18 @@ const MapView = ({
   const [currentMapCenter, setCurrentMapCenter] =
     useState<Location>(initialLocation);
   const [mapHasMoved, setMapHasMoved] = useState(false);
+  const [currentQuery, setCurrentQuery] = useState<string>(initialQuery);
   const API_URI = process.env.NEXT_PUBLIC_API_URL;
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
-  const { progress, isComplete, loadedAssets, totalAssets } =
-    useYoreAssetProgress();
+  const { progress, isComplete } = useYoreAssetProgress();
   const {
     location: userLocation,
     loading: locationLoading,
     permission,
     requestLocation,
   } = useGeolocation();
+  const { getCachedResults, setCachedResults, clearExpiredEntries } = useSearchCache();
 
   // Debug user location state
   console.log("MapView: Current location state:", {
@@ -118,18 +120,28 @@ const MapView = ({
     lng: mapCenter.longitude,
   };
 
-  // Fetch places based on location and radius
+  // Fetch places based on location and radius with caching
   const fetchPlaces = useCallback(
-    async (location: Location) => {
+    async (location: Location, searchQuery: string = initialQuery) => {
       if (!location) return;
 
-      console.log("Fetching places for location:", location);
+      console.log("Fetching places for location:", location, "query:", searchQuery);
+
+      // Check cache first
+      const cachedResults = getCachedResults(searchQuery, location, SEARCH_RADIUS);
+      if (cachedResults) {
+        console.log("Using cached results:", cachedResults.length, "places");
+        setPlaces(cachedResults);
+        saveMapState(location, mapZoom, cachedResults);
+        return;
+      }
+
       setLoading(true);
       setError(null);
 
       try {
         const response = await fetch(
-          `${API_URI}/places/search?query=${initialQuery}&location=${location.latitude},${location.longitude}&radius=${SEARCH_RADIUS}&fields=places.displayName,places.formattedAddress,places.id,places.location`,
+          `${API_URI}/places/search?query=${searchQuery}&location=${location.latitude},${location.longitude}&radius=${SEARCH_RADIUS}&fields=places.displayName,places.formattedAddress,places.id,places.location`,
         );
 
         if (!response.ok) {
@@ -143,6 +155,8 @@ const MapView = ({
         if (data.places && Array.isArray(data.places)) {
           console.log("Setting places:", data.places.length, "places found");
           setPlaces(data.places);
+          // Cache the results
+          setCachedResults(searchQuery, location, SEARCH_RADIUS, data.places);
           // Save map state after successful search
           saveMapState(location, mapZoom, data.places);
         } else if (data.error) {
@@ -150,6 +164,7 @@ const MapView = ({
         } else {
           console.log("No places found");
           setPlaces([]);
+          setCachedResults(searchQuery, location, SEARCH_RADIUS, []);
           saveMapState(location, mapZoom, []);
         }
       } catch (err) {
@@ -159,7 +174,7 @@ const MapView = ({
         setLoading(false);
       }
     },
-    [API_URI, initialQuery, SEARCH_RADIUS, mapZoom, saveMapState],
+    [API_URI, initialQuery, SEARCH_RADIUS, mapZoom, saveMapState, getCachedResults, setCachedResults],
   );
 
   // Update search location when user location changes (only if toggle is enabled)
@@ -186,8 +201,8 @@ const MapView = ({
 
   // Fetch places when search location changes
   useEffect(() => {
-    fetchPlaces(searchLocation);
-  }, [searchLocation, fetchPlaces]);
+    fetchPlaces(searchLocation, currentQuery);
+  }, [searchLocation, fetchPlaces, currentQuery]);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -214,7 +229,7 @@ const MapView = ({
     }
   }, [restoreMapState]);
 
-  // Search this area functionality
+  // Search this area functionality (uses default archaeological query)
   const searchThisArea = useCallback(() => {
     // Get the current map center from the map instance
     const map = mapRef.current;
@@ -227,23 +242,29 @@ const MapView = ({
           longitude: center.lng(),
         };
         console.log(
-          "Manual search triggered for area:",
+          "Manual area search triggered for:",
           currentLocation,
           "zoom:",
           zoom,
         );
+
+        // Reset to default archaeological query for area searches
+        console.log("Resetting to default query for area search");
+        setCurrentQuery(initialQuery);
         setSearchLocation(currentLocation);
         setMapCenter(currentLocation); // Update state only when user explicitly searches
         setMapHasMoved(false); // Reset the moved flag after search
         if (zoom !== undefined) {
           setMapZoom(zoom);
         }
-        // This will trigger the useEffect that calls fetchPlaces
+
+        // Directly call fetchPlaces with default query to avoid text search conflict
+        fetchPlaces(currentLocation, initialQuery);
       }
     } else {
       console.log("No map instance available for search");
     }
-  }, []);
+  }, [initialQuery, fetchPlaces]);
 
   // Handle map initialization via center change event
   const handleMapInitialization = useCallback(
@@ -348,7 +369,7 @@ const MapView = ({
 
   // Handle map center changes - track for circle display but don't update search state
   const handleMapCenterChange = useCallback(
-    (event: any) => {
+    (event: google.maps.MapMouseEvent) => {
       console.log("MapView: onCenterChanged event fired");
 
       // Try to get the map instance from the event
@@ -383,12 +404,97 @@ const MapView = ({
     [mapZoom, handleMapInitialization],
   );
 
+  // Handle text search with geocoding
+  const handleTextSearch = useCallback(async (query: string) => {
+    console.log("Text search triggered:", query);
+
+    // Clear expired cache entries
+    clearExpiredEntries();
+
+    // Update current query
+    setCurrentQuery(query);
+
+    // Reset map moved state since we're doing a new search
+    setMapHasMoved(false);
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      // First geocode the search query to get coordinates
+      console.log("Geocoding search query:", query);
+      const geocodeResult = await geocodeWithFallback(query);
+
+      if ('error' in geocodeResult) {
+        console.error("Geocoding failed:", geocodeResult.error);
+        setError(`Could not find location: ${geocodeResult.error}`);
+        return;
+      }
+
+      console.log("Geocoded location:", geocodeResult.location);
+      console.log("Formatted address:", geocodeResult.formattedAddress);
+
+      // Update map center to the geocoded location
+      setMapCenter(geocodeResult.location);
+      setSearchLocation(geocodeResult.location);
+      setCurrentMapCenter(geocodeResult.location);
+
+      // Center the map on the geocoded location
+      if (mapRef.current) {
+        console.log("Centering map on geocoded location:", geocodeResult.location);
+        mapRef.current.setCenter({
+          lat: geocodeResult.location.latitude,
+          lng: geocodeResult.location.longitude,
+        });
+        mapRef.current.setZoom(12); // Good zoom level for exploring the area
+        setMapZoom(12);
+        console.log("Map centered and zoomed to level 12");
+      } else {
+        console.warn("Map ref not available for centering");
+      }
+
+      // Perform search at the geocoded location
+      console.log("Starting place search at geocoded location");
+      await fetchPlaces(geocodeResult.location, query);
+
+    } catch (error) {
+      console.error("Search error:", error);
+      setError(error instanceof Error ? error.message : "Search failed");
+    } finally {
+      setLoading(false);
+    }
+  }, [clearExpiredEntries, fetchPlaces, mapRef]);
+
+  // Handle clearing text search (reset to default query)
+  const handleClearSearch = useCallback(() => {
+    console.log("Clearing text search, reverting to default query");
+    setCurrentQuery(initialQuery);
+    
+    // Use current map center for search with default query
+    const searchLocation = userLocation && useUserLocation ? userLocation : currentMapCenter;
+    fetchPlaces(searchLocation, initialQuery);
+  }, [initialQuery, userLocation, useUserLocation, currentMapCenter, fetchPlaces]);
+
   // Show "search this area" button and circle when no places loaded or when map has been moved
   const shouldShowSearchButton = places.length === 0 || mapHasMoved;
 
   return (
     <MapProvider>
-      <div className="relative text-black w-screen h-screen flex items-center justify-center z-0">
+      <div className="group relative text-black w-screen h-screen flex items-center justify-center z-0">
+        <div className="absolute top-0 bottom-auto translate-y-16 left-0 w-full z-10 bg-transparent pointer-events-none group-hover:translate-y-16 transition-transform duration-300 ease-in-out">
+          <div className="flex justify-center pt-4 px-4 ">
+            <div className="pointer-events-auto">
+              <TextSearch
+                onSearch={handleTextSearch}
+                loading={loading}
+                placeholder="Search the Yore-acle..."
+                onClear={handleClearSearch}
+                initialValue={currentQuery === initialQuery ? "" : currentQuery}
+              />
+            </div>
+          </div>
+        </div>
+
         <div className="absolute top-0 right-0 w-56 h-full z-10 bg-transparent">
           <div className="flex flex-col py-32 px-4 gap-6 items-end justify-start">
             {/* Debug info */}
@@ -441,8 +547,8 @@ const MapView = ({
                   onClick={toggleLocationUsage}
                   className={`p-2 rounded-lg shadow-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                     useUserLocation
-                      ? "bg-green-500 text-white hover:bg-green-600 focus:ring-green-500"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-gray-500"
+                      ? "bg-green-500 text-blue-200 hover:bg-green-600 focus:ring-green-500"
+                      : "bg-yore-social text-blue-200 hover:bg-yore-social/70 focus:ring-yore-social"
                   }`}
                   aria-label={
                     useUserLocation
@@ -466,7 +572,7 @@ const MapView = ({
                 <button
                   onClick={centerOnUserLocation}
                   disabled={!userLocation && permission !== "granted"}
-                  className="p-2 rounded-lg shadow-lg text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="p-2 rounded-lg shadow-lg text-sm font-medium bg-blue-500 text-blue-200 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   aria-label="Center map on your location"
                   title="Return to your location"
                 >
@@ -480,7 +586,7 @@ const MapView = ({
               </div>
             )}
 
-            {permission === "denied" && useUserLocation && (
+            {permission === "denied" && !useUserLocation && (
               <div
                 className="bg-amber-50 border border-amber-200 p-4 rounded-lg shadow-lg"
                 role="alert"
@@ -514,14 +620,14 @@ const MapView = ({
             {shouldShowSearchButton && (
               <div>
                 <div className="bg-white p-3 rounded-lg shadow-lg border border-green-200 flex flex-col items-center justify-center">
-                  <p className="text-xs text-gray-600 mb-2 text-center">
+                  <p className="text-xs text-gray-600 mb-2 text-left">
                     Drag the map to explore, then click to search within ~30
                     miles
                   </p>
                   <button
                     onClick={searchThisArea}
                     disabled={loading}
-                    className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg text-sm font-medium hover:bg-green-600 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
+                    className="bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg text-sm font-medium hover:bg-green-600 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
                     aria-label="Search for places in the current map area"
                   >
                     {loading ? "Searching..." : "🔍 Search This Area"}
@@ -561,7 +667,7 @@ const MapView = ({
           defaultCenter={center}
           defaultZoom={mapZoom}
           gestureHandling={"greedy"}
-          disableDefaultUI={false}
+          disableDefaultUI={true}
           mapId="6899f89edbf4a393d05523a5"
           onCenterChanged={handleMapCenterChange}
         >

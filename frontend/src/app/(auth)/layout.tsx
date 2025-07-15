@@ -18,7 +18,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
                 <AuthCard
                     logo={
                         <Link href="/">
-                            <ApplicationLogo className="w-32 h-auto" />
+                            <ApplicationLogo className="w-48 h-auto" />
                         </Link>
                     }>
                     {children}

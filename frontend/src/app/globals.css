@@ -7,4 +7,9 @@
     h1 {
         @apply capitalize;
     }
+
+    form input {
+        @apply border-0 border-gray-300 rounded-md p-2;
+    }
+
 }

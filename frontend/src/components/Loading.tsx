@@ -19,7 +19,8 @@ const YoreLoader = ({
     primary: '#374151', // Dark gray
     accent: '#eab308', // Golden yellow
     light: '#f8fafc', // Light gray
-    earth: '#92400e' // Earth brown
+      earth: '#92400e', // Earth brown
+    copy: '#7A8EC4', // Blue-gray
   };
 
   // Calculate animation values based on progress (0-100)
@@ -220,8 +221,8 @@ const YoreLoader = ({
       {showProgress && (
         <div className="mt-4 text-center">
           <div
-            className="text-lg font-medium text-gray-700"
-            style={{ color: colors.primary }}
+            className="text-lg font-light text-gray-300"
+            style={{ color: colors.copy }}
           >
             {normalizedProgress < 25 && "Discovering sites..."}
             {normalizedProgress >= 25 && normalizedProgress < 50 && "Analyzing data..."}
@@ -230,8 +231,8 @@ const YoreLoader = ({
             {normalizedProgress >= 100 && "Complete!"}
           </div>
           <div
-            className="text-sm text-gray-500 mt-1"
-            style={{ color: colors.primary, opacity: 0.7 }}
+            className="text-sm text-gray-300 mt-1"
+            style={{ color: colors.copy, opacity: 0.7 }}
           >
             {Math.round(normalizedProgress)}%
           </div>

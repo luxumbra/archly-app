@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useRef, useEffect } from 'react'
 import { AdvancedMarker, useMap } from '@vis.gl/react-google-maps'
 import { Place } from '@/types'
 import { useRouter } from 'next/navigation'
 import { slugify } from '@/utils/stringUtils'
+import MarkerInfoWindow from './MarkerInfoWindow'
 
 interface ClusteredMapMarkersProps {
   places: Place[]
@@ -22,8 +23,13 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
   places,
   onMarkerClick
 }) => {
+  console.log('ClusteredMapMarkers: Component render with places:', places?.length || 0)
+  
   const router = useRouter()
   const map = useMap()
+  const [hoveredPlace, setHoveredPlace] = useState<Place | null>(null)
+  const [infoWindowOpen, setInfoWindowOpen] = useState(false)
+  const [animateMarkers, setAnimateMarkers] = useState(false)
 
   // Simple clustering logic based on proximity and zoom level
   const clusteredMarkers = useMemo(() => {
@@ -170,6 +176,43 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
 
   console.log('ClusteredMapMarkers: Rendering', clusteredMarkers.length, 'markers')
 
+  // Handle marker hover events
+  const handleMarkerHover = (place: Place) => {
+    setHoveredPlace(place)
+    setInfoWindowOpen(true)
+  }
+
+  const handleMarkerLeave = () => {
+    // Delay hiding to allow moving to info window
+    setTimeout(() => {
+      if (!infoWindowOpen) {
+        setHoveredPlace(null)
+        setInfoWindowOpen(false)
+      }
+    }, 200)
+  }
+
+  const handleInfoWindowClose = () => {
+    setHoveredPlace(null)
+    setInfoWindowOpen(false)
+  }
+
+  // Trigger CSS animations when markers load
+  useEffect(() => {
+    if (clusteredMarkers.length > 0) {
+      // Reset animation state
+      setAnimateMarkers(false)
+      
+      // Small delay to ensure markers are rendered, then trigger animation
+      const timer = setTimeout(() => {
+        setAnimateMarkers(true)
+        console.log(`CSS: Animating ${clusteredMarkers.length} markers with stagger`)
+      }, 100)
+
+      return () => clearTimeout(timer)
+    }
+  }, [clusteredMarkers])
+
   // Fallback: if no clusters created, show individual markers
   if (clusteredMarkers.length === 0 && places && places.length > 0) {
     console.log('ClusteredMapMarkers: Falling back to individual markers')
@@ -189,9 +232,30 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
               }
             }}
           >
-            <PinMarker cluster={{ lat: place.location.latitude, lng: place.location.longitude, places: [place], isCluster: false }} />
+            <div 
+              className={`marker-animation ${animateMarkers ? 'animate-in' : ''}`}
+              style={{ 
+                animationDelay: `${index * 100}ms`,
+                opacity: animateMarkers ? 1 : 0,
+                transform: animateMarkers ? 'scale(1) translateY(0) rotate(0deg)' : 'scale(0) translateY(-30px) rotate(-180deg)',
+                transition: 'all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+              }}
+              onMouseEnter={() => handleMarkerHover(place)}
+              onMouseLeave={handleMarkerLeave}
+            >
+              <PinMarker cluster={{ lat: place.location.latitude, lng: place.location.longitude, places: [place], isCluster: false }} />
+            </div>
           </AdvancedMarker>
         ))}
+        
+        {/* Info Window */}
+        {hoveredPlace && infoWindowOpen && (
+          <MarkerInfoWindow
+            place={hoveredPlace}
+            isOpen={infoWindowOpen}
+            onClose={handleInfoWindowClose}
+          />
+        )}
       </>
     )
   }
@@ -208,9 +272,35 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
           }
           onClick={() => handleMarkerClick(cluster)}
         >
-          <PinMarker cluster={cluster} />
+          <div 
+            className={`marker-animation ${animateMarkers ? 'animate-in' : ''}`}
+            style={{ 
+              animationDelay: `${index * 120}ms`,
+              opacity: animateMarkers ? 1 : 0,
+              transform: animateMarkers ? 'scale(1) translateY(0) rotate(0deg)' : 'scale(0) translateY(-30px) rotate(-180deg)',
+              transition: 'all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+            }}
+            onMouseEnter={() => {
+              // Only show info window for individual markers, not clusters
+              if (!cluster.isCluster && cluster.places[0]) {
+                handleMarkerHover(cluster.places[0])
+              }
+            }}
+            onMouseLeave={handleMarkerLeave}
+          >
+            <PinMarker cluster={cluster} />
+          </div>
         </AdvancedMarker>
       ))}
+      
+      {/* Info Window */}
+      {hoveredPlace && infoWindowOpen && (
+        <MarkerInfoWindow
+          place={hoveredPlace}
+          isOpen={infoWindowOpen}
+          onClose={handleInfoWindowClose}
+        />
+      )}
     </>
   )
 }

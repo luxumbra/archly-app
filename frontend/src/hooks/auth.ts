@@ -28,15 +28,15 @@ export const useAuth = ({
     error,
     mutate,
   } = useSWR<User>(
-    "/user", 
+    "/user",
     async () => {
       try {
         const response = await axios.get<User>("/user");
         return response.data;
       } catch (error: unknown) {
         // Don't throw 401 errors - just return null for unauthenticated users
-        if (error && typeof error === 'object' && 'response' in error && 
-            error.response && typeof error.response === 'object' && 
+        if (error && typeof error === 'object' && 'response' in error &&
+            error.response && typeof error.response === 'object' &&
             'status' in error.response && error.response.status === 401) {
           return null;
         }
@@ -52,20 +52,26 @@ export const useAuth = ({
     }
   );
 
-  const csrf = () => axios.get("/sanctum/csrf-cookie");
-
   const register = async ({
     setErrors,
+    setStatus,
     ...props
   }: RegisterCredentials & {
     setErrors: (errors: ValidationErrors) => void;
+    setStatus?: (status: string | null) => void;
   }) => {
-    await csrf();
     setErrors({});
+    setStatus?.('');
 
     try {
-      await axios.post("/register", props);
-      mutate();
+      const response = await axios.post("/register", props);
+      
+      // Store the token in localStorage
+      localStorage.setItem('auth_token', response.data.token);
+      
+      // Set the user data from registration response
+      mutate(response.data.user, { revalidate: false });
+      setStatus?.(response.data.message || 'Registration successful!');
     } catch (error: unknown) {
       if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'status' in error.response && error.response.status !== 422) throw error;
       if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'errors' in error.response.data) {
@@ -82,13 +88,18 @@ export const useAuth = ({
     setErrors: (errors: ValidationErrors) => void;
     setStatus: (status: string | null) => void;
   }) => {
-    await csrf();
     setErrors({});
     setStatus(null);
 
     try {
-      await axios.post("/login", props);
-      mutate();
+      const response = await axios.post("/login", props);
+      
+      // Store the token in localStorage
+      localStorage.setItem('auth_token', response.data.token);
+      
+      // Set the user data from login response
+      mutate(response.data.user, { revalidate: false });
+      setStatus(response.data.message || 'Login successful!');
     } catch (error: unknown) {
       if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'status' in error.response && error.response.status !== 422) throw error;
       if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'errors' in error.response.data) {
@@ -105,7 +116,6 @@ export const useAuth = ({
     setErrors: (errors: ValidationErrors) => void;
     setStatus: (status: string | null) => void;
   }) => {
-    await csrf();
     setErrors({});
     setStatus(null);
 
@@ -128,7 +138,6 @@ export const useAuth = ({
     setErrors: (errors: ValidationErrors) => void;
     setStatus: (status: string | null) => void;
   }) => {
-    await csrf();
     setErrors({});
     setStatus(null);
 
@@ -157,15 +166,25 @@ export const useAuth = ({
   };
 
   const logout = useCallback(async () => {
-    if (!error) {
-      await axios.post("/logout").then(() => mutate());
+    try {
+      if (!error) {
+        await axios.post("/logout");
+      }
+    } catch (error) {
+      // Continue with logout even if API call fails
+      console.error('Logout API call failed:', error);
+    } finally {
+      // Always clear token and redirect
+      localStorage.removeItem('auth_token');
+      mutate(null, { revalidate: false });
+      window.location.pathname = "/login";
     }
-    window.location.pathname = "/login";
   }, [error, mutate]);
 
   useEffect(() => {
-    if (middleware === "guest" && redirectIfAuthenticated && user)
+    if (middleware === "guest" && redirectIfAuthenticated && user) {
       router.push(redirectIfAuthenticated);
+    }
     if (window.location.pathname === "/verify-email" && user?.email_verified_at)
       router.push(redirectIfAuthenticated || "/dashboard");
     if (middleware === "auth" && error) logout();

@@ -19,6 +19,7 @@ const RegisterPage = () => {
     const [password, setPassword] = useState('')
     const [passwordConfirmation, setPasswordConfirmation] = useState('')
     const [errors, setErrors] = useState<Record<string, string[]>>({})
+    const [status, setStatus] = useState<string | null>(null)
 
     const submitForm = (event: React.FormEvent) => {
         event.preventDefault()
@@ -29,11 +30,19 @@ const RegisterPage = () => {
             password,
             password_confirmation: passwordConfirmation,
             setErrors,
+            setStatus,
         })
     }
 
     return (
         <form onSubmit={submitForm}>
+            {/* Status */}
+            {status && (
+                <div className="mb-4 font-medium text-sm text-green-400">
+                    {status}
+                </div>
+            )}
+
             {/* Name */}
             <div>
                 <Label htmlFor="name">Name</Label>
@@ -42,10 +51,11 @@ const RegisterPage = () => {
                     id="name"
                     type="text"
                     value={name}
-                    className="block mt-1 w-full"
+                    className="block mt-1 w-full bg-yore-dark border-gray-700"
                     onChange={event => setName(event.target.value)}
                     required
                     autoFocus
+                    autoComplete='name'
                 />
 
                 <InputError messages={errors.name} className="mt-2" />
@@ -59,9 +69,10 @@ const RegisterPage = () => {
                     id="email"
                     type="email"
                     value={email}
-                    className="block mt-1 w-full"
+                    className="block mt-1 w-full  bg-yore-dark border-gray-700"
                     onChange={event => setEmail(event.target.value)}
                     required
+                    autoComplete="email"
                 />
 
                 <InputError messages={errors.email} className="mt-2" />
@@ -75,7 +86,7 @@ const RegisterPage = () => {
                     id="password"
                     type="password"
                     value={password}
-                    className="block mt-1 w-full"
+                    className="block mt-1 w-full bg-yore-dark border-gray-700"
                     onChange={event => setPassword(event.target.value)}
                     required
                     autoComplete="new-password"
@@ -94,11 +105,12 @@ const RegisterPage = () => {
                     id="passwordConfirmation"
                     type="password"
                     value={passwordConfirmation}
-                    className="block mt-1 w-full"
+                    className="block mt-1 w-full bg-yore-dark border-gray-700"
                     onChange={event =>
                         setPasswordConfirmation(event.target.value)
                     }
                     required
+                    autoComplete="new-password"
                 />
 
                 <InputError

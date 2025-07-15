@@ -61,10 +61,11 @@ const LoginPage = () => {
                         id="email"
                         type="email"
                         value={email}
-                        className="block mt-1 w-full"
+                        className="block mt-1 w-full bg-yore-dark border-gray-700"
                         onChange={event => setEmail(event.target.value)}
                         required
                         autoFocus
+                        autoComplete="email"
                     />
 
                     <InputError messages={errors.email} className="mt-2" />
@@ -78,7 +79,7 @@ const LoginPage = () => {
                         id="password"
                         type="password"
                         value={password}
-                        className="block mt-1 w-full"
+                        className="block mt-1 w-full bg-yore-dark border-gray-700"
                         onChange={event => setPassword(event.target.value)}
                         required
                         autoComplete="current-password"
