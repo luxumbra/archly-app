@@ -13,12 +13,12 @@ interface AuthLayoutProps {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
     return (
-        <div>
-            <div className="text-gray-900 antialiased">
+        <div className="bg-yore-dark text-gray-300">
+            <div className="antialiased">
                 <AuthCard
                     logo={
                         <Link href="/">
-                            <ApplicationLogo className="w-20 h-20 fill-gray-500" />
+                            <ApplicationLogo className="w-48 h-auto" />
                         </Link>
                     }>
                     {children}

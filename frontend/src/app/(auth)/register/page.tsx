@@ -19,6 +19,7 @@ const RegisterPage = () => {
     const [password, setPassword] = useState('')
     const [passwordConfirmation, setPasswordConfirmation] = useState('')
     const [errors, setErrors] = useState<Record<string, string[]>>({})
+    const [status, setStatus] = useState<string | null>(null)
 
     const submitForm = (event: React.FormEvent) => {
         event.preventDefault()
@@ -29,11 +30,19 @@ const RegisterPage = () => {
             password,
             password_confirmation: passwordConfirmation,
             setErrors,
+            setStatus,
         })
     }
 
     return (
         <form onSubmit={submitForm}>
+            {/* Status */}
+            {status && (
+                <div className="mb-4 font-medium text-sm text-green-400">
+                    {status}
+                </div>
+            )}
+
             {/* Name */}
             <div>
                 <Label htmlFor="name">Name</Label>
@@ -42,40 +51,42 @@ const RegisterPage = () => {
                     id="name"
                     type="text"
                     value={name}
-                    className="block mt-1 w-full"
+                    className="block mt-1 w-full bg-yore-dark border-gray-700"
                     onChange={event => setName(event.target.value)}
                     required
                     autoFocus
+                    autoComplete='name'
                 />
 
                 <InputError messages={errors.name} className="mt-2" />
             </div>
 
             {/* Email Address */}
-            <div className="mt-4">
-                <Label htmlFor="email">Email</Label>
+            <div className="mt-4 text-gray-300">
+                <Label htmlFor="email" className="text-gray-300">Email</Label>
 
                 <Input
                     id="email"
                     type="email"
                     value={email}
-                    className="block mt-1 w-full"
+                    className="block mt-1 w-full  bg-yore-dark border-gray-700"
                     onChange={event => setEmail(event.target.value)}
                     required
+                    autoComplete="email"
                 />
 
                 <InputError messages={errors.email} className="mt-2" />
             </div>
 
             {/* Password */}
-            <div className="mt-4">
-                <Label htmlFor="password">Password</Label>
+            <div className="mt-4 text-gray-300">
+                <Label htmlFor="password" className="text-gray-300">Password</Label>
 
                 <Input
                     id="password"
                     type="password"
                     value={password}
-                    className="block mt-1 w-full"
+                    className="block mt-1 w-full bg-yore-dark border-gray-700"
                     onChange={event => setPassword(event.target.value)}
                     required
                     autoComplete="new-password"
@@ -85,8 +96,8 @@ const RegisterPage = () => {
             </div>
 
             {/* Confirm Password */}
-            <div className="mt-4">
-                <Label htmlFor="passwordConfirmation">
+            <div className="mt-4 text-gray-300">
+                <Label htmlFor="passwordConfirmation" className="text-gray-300">
                     Confirm Password
                 </Label>
 
@@ -94,11 +105,12 @@ const RegisterPage = () => {
                     id="passwordConfirmation"
                     type="password"
                     value={passwordConfirmation}
-                    className="block mt-1 w-full"
+                    className="block mt-1 w-full bg-yore-dark border-gray-700"
                     onChange={event =>
                         setPasswordConfirmation(event.target.value)
                     }
                     required
+                    autoComplete="new-password"
                 />
 
                 <InputError
@@ -110,7 +122,7 @@ const RegisterPage = () => {
             <div className="flex items-center justify-end mt-4">
                 <Link
                     href="/login"
-                    className="underline text-sm text-gray-600 hover:text-gray-900">
+                    className="underline text-sm text-gray-300 hover:text-gray-900">
                     Already registered?
                 </Link>
 
