@@ -7,7 +7,7 @@
     @apply text-3xl lg:text-5xl font-serif font-normal text-white mb-6;
   }
   h2 {
-    @apply text-4xl lg:text-7xl  font-serif text-white mb-6;
+    @apply text-4xl lg:text-6xl  font-serif text-white mb-6;
   }
   h3 {
     @apply text-4xl lg:text-7xl font-serif font-normal text-white mb-6 lg:mb-8;

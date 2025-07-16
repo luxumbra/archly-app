@@ -2,19 +2,23 @@
 import { Image } from "astro:assets";
 import AppPreviewBg from "../assets/images/yore-mobile-mock.png";
 import HeroBg from "../assets/images/hero-bg.png";
-import { AnimateTitles } from "./animation/Animations";
+import ArIcon from "../assets/icons/ar.svg";
+import JournalIcon from "../assets/icons/journal.svg";
+import CommunityIcon from "../assets/icons/community.svg";
+import AchievementsIcon from "../assets/icons/achievements.svg";
+import { AnimateAppMockup, AnimateTitles } from "./animation/Animations";
 ---
 
 <section
   id="what-is-yore"
-  class="relative flex items-center min-h-screen py-32 overflow-hidden bg-yore-dark"
+  class="relative flex items-center min-h-screen py-32 overflow-hidden bg-yore-dark shadow-xl shadow-black/80"
 >
   <!-- Background Map -->
   <div class="absolute inset-0 bg-center bg-cover">
     <Image
       src={HeroBg}
       alt="Hero Background"
-      class="absolute inset-0 object-cover w-full h-full mix-blend-luminosity"
+      class="absolute inset-0 object-cover w-full h-full mix-blend-luminosity opacity-50"
     />
     <div class="absolute inset-0 z-10 bg-yore-dark/70 lg:bg-yore-dark/20"></div>
   </div>
@@ -24,34 +28,52 @@ import { AnimateTitles } from "./animation/Animations";
   >
     <!-- Left Content -->
     <div>
-      <h2>What is Yore?</h2>
+      <h2 class="text-yore-social">A Platform Built for Explorers, Historians, and the Curious</h2>
       <div class='leading-relaxed"'>
         <p>
-          Yore is the intelligent platform for archaeology and history
-          enthusiasts.
+          Yore is your digital companion for uncovering history.
         </p>
+        <ul class="space-y-4 my-4 ">
+          <li class="flex items-start gap-3">
+            <ArIcon class="w-6 h-6 mt-1 flex-shrink-0 fill-current text-yore-explore" />
+            <span>Instantly access expert insights with our "Yore-acle" AI.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <JournalIcon class="w-6 h-6 mt-1 flex-shrink-0 fill-current text-yore-log" />
+            <span>Record your journeys with photos, notes, and locations.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <CommunityIcon class="w-6 h-6 mt-1 flex-shrink-0 fill-current text-yore-social" />
+            <span>Connect with a global network of passionate explorers.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <AchievementsIcon class="w-6 h-6 mt-1 flex-shrink-0 fill-current text-yore-discover" />
+            <span>Earn recognition for your discoveries—seamlessly, securely, and without technical barriers.</span>
+          </li>
+        </ul>
         <p>
-          Whether you're an amateur historian, professional archaeologist, or
-          weekend explorer, Yore transforms how you discover, analyze, and share
-          historical sites.
+          Whether you're a seasoned archaeologist or just love a good story, Yore makes every adventure meaningful.
         </p>
-        <p>
-          You can stay current and share findings made in exploration with a
-          community of like-minded explorers. Chat to the "Yore-acle", an AI
-          powered historian chatbot, document your visits with notes, photos,
-          and GPS locations, and explore entries from other history enthusiasts
-          around the world.
-        </p>
+      </div>
+      <div class="flex items-center justify-center gap-4 mx-auto sm:flex-row max-w-48 lg:max-w-6xl mt-12 ">
+        {/* CTA Buttons - Features (links to next section) */}
+        <a href="#features" class="w-full px-8 py-3 font-semibold text-white transition-colors rounded-lg bg-yore-primary hover:bg-yore-primary/90 lg:w-auto">
+          Features
+        </a>
+        <a href="#signup" class="w-full px-8 py-3 font-semibold text-white transition-colors bg-transparent border-2 border-white rounded-lg hover:bg-white hover:text-gray-900 lg:w-auto">
+          Sign up
+        </a>
       </div>
     </div>
     <div class="flex items-center justify-center lg:justify-end">
       <Image
         src={AppPreviewBg}
         alt="App Preview Background"
-        class="w-3/4 h-auto mix-blend-normal"
+        class="w-3/4 h-auto mix-blend-normal app-mockup"
       />
     </div>
   </div>
 </section>
 
 <AnimateTitles client:load />
+<AnimateAppMockup client:load />

@@ -1,0 +1,60 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogType?: string;
+  ogUrl?: string;
+  twitterCard?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
+  keywords?: string;
+  robots?: string;
+}
+
+const {
+  title = 'Yore – Explore, Log, and Share Your Historical Adventures',
+  description = 'Discover hidden history with advanced mapping and AI analysis. Join a community of explorers documenting and learning about archaeological sites with cutting-edge technology.',
+  canonical = 'https://yore.earth',
+  ogTitle = title,
+  ogDescription = description,
+  ogImage = '/assets/images/map-pin.png',
+  ogType = 'website',
+  ogUrl = canonical,
+  twitterCard = 'summary_large_image',
+  twitterTitle = ogTitle,
+  twitterDescription = ogDescription,
+  twitterImage = ogImage,
+  keywords = 'archaeology, history, mapping, AI, LiDAR, exploration, heritage, sites, community',
+  robots = 'index, follow',
+} = Astro.props;
+---
+
+<!-- SEO & Social Meta Tags -->
+<meta charset="UTF-8" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="keywords" content={keywords} />
+<meta name="robots" content={robots} />
+<link rel="canonical" href={canonical} />
+<link rel="icon" type="image/png" href="/assets/images/map-pin.png" />
+<link rel="icon" type="image/svg+xml" href="/assets/icons/map-pin.svg" />
+<link rel="apple-touch-icon" href="/assets/images/map-pin.png" />
+
+<!-- Open Graph -->
+<meta property="og:title" content={ogTitle} />
+<meta property="og:description" content={ogDescription} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={ogUrl} />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content={twitterCard} />
+<meta name="twitter:title" content={twitterTitle} />
+<meta name="twitter:description" content={twitterDescription} />
+<meta name="twitter:image" content={twitterImage} />

@@ -66,4 +66,31 @@ function AnimateFeatures(): void {
   }, {});
 }
 
-export { AnimateTitles, AnimateFeatures };
+/**
+ * Animate the app mockup image
+ * This component animates the app mockup image on the page using GSAP. As the page scrolls, the image will animate in from the right using the scrollTrigger plugin.
+ */
+function AnimateAppMockup(): void {
+  useGSAP(() => {
+    const tl = gsap.timeline();
+    const appMockup = document.querySelector(".app-mockup");
+    if (appMockup) {
+      tl.from(appMockup, {
+        scrollTrigger: {
+          trigger: appMockup,
+          start: "top 80%",
+          end: "bottom 50%",
+          scrub: true,
+        },
+        opacity: 0,
+        scale: 0.7,
+        x: 100,
+        duration: 1,
+        ease: "power3.out",
+        delay: 0.1,
+      });
+    }
+  }, {});
+}
+
+export { AnimateTitles, AnimateFeatures, AnimateAppMockup };
