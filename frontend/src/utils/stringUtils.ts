@@ -43,6 +43,27 @@ export function camelToSentence(str: string): string {
     .toLowerCase();
 }
 
+// 6. Site Type to Human Readable: Convert database site_type enum to readable text
+export function siteTypeToReadable(siteType: string | null): string {
+  if (!siteType) return 'Archaeological Site';
+  
+  const siteTypeMap: { [key: string]: string } = {
+    'stone_circle': 'Stone Circle',
+    'roman_villa': 'Roman Villa',
+    'medieval_castle': 'Medieval Castle',
+    'neolithic_monument': 'Neolithic Monument',
+    'bronze_age_site': 'Bronze Age Site',
+    'iron_age_fort': 'Iron Age Hill Fort',
+    'anglo_saxon_site': 'Anglo-Saxon Site',
+    'prehistoric_site': 'Prehistoric Site',
+    'historic_building': 'Historic Building',
+    'archaeological_site': 'Archaeological Site',
+    'other': 'Archaeological Site'
+  };
+  
+  return siteTypeMap[siteType] || capitalize(unslugify(siteType) || 'Archaeological Site');
+}
+
 // Default export for backward compatibility
 const stringUtils = {
   slugify,
@@ -51,6 +72,7 @@ const stringUtils = {
   truncate,
   toUnderscore,
   camelToSentence,
+  siteTypeToReadable,
 };
 
 export default stringUtils;

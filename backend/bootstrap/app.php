@@ -24,6 +24,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'api/*',
         ]);
 
+        // Add session middleware to API routes for Sanctum SPA authentication
+        $middleware->statefulApi();
+
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {

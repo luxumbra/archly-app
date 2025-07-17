@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CacheController;
 use App\Http\Controllers\PlaceController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GooglePlacesController;
@@ -16,7 +17,6 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
-
 
 // Auth routes
 Route::post('/register', [RegisteredUserController::class, 'store'])
@@ -61,9 +61,33 @@ Route::prefix('places')->group(function () {
 });
 
 Route::prefix('place')->group(function () {
-    Route::get('details', [PlaceController::class, 'show']);
+    Route::get('details', [PlaceController::class, 'showByGoogleId']);
+    Route::get('{slug}', [PlaceController::class, 'showBySlug']);
 });
 
 Route::prefix('redis-cache')->group(function () {
     Route::delete('/clear', [CacheController::class,'clearRedisCache']);
+});
+
+// Protected routes that require authentication
+Route::middleware(['auth:sanctum'])->group(function () {
+    // User profile routes
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [UserProfileController::class, 'show']);
+        Route::patch('/', [UserProfileController::class, 'update']);
+        Route::get('/achievements', [UserProfileController::class, 'achievements']);
+        Route::get('/points', [UserProfileController::class, 'points']);
+        Route::get('/streak', [UserProfileController::class, 'streak']);
+    });
+
+    // Place interaction routes
+    Route::prefix('places')->group(function () {
+        Route::get('/nearby', [PlaceController::class, 'nearby']);
+        Route::get('/favorites', [PlaceController::class, 'favorites']);
+        Route::get('/visits', [PlaceController::class, 'visits']);
+        Route::get('/{id}', [PlaceController::class, 'show']);
+        Route::post('/{id}/visit', [PlaceController::class, 'visit']);
+        Route::post('/{id}/favorite', [PlaceController::class, 'toggleFavorite']);
+        Route::post('/{id}/review', [PlaceController::class, 'review']);
+    });
 });

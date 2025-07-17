@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import axios from "@/lib/axios";
+import axios, { csrfClient } from "@/lib/axios";
 import { useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -64,10 +64,11 @@ export const useAuth = ({
     setStatus?.('');
 
     try {
-      const response = await axios.post("/register", props);
+      // First, get CSRF cookie from Laravel's built-in route
+      await csrfClient.get('/sanctum/csrf-cookie');
       
-      // Store the token in localStorage
-      localStorage.setItem('auth_token', response.data.token);
+      // Then register
+      const response = await axios.post("/register", props);
       
       // Set the user data from registration response
       mutate(response.data.user, { revalidate: false });
@@ -92,10 +93,11 @@ export const useAuth = ({
     setStatus(null);
 
     try {
-      const response = await axios.post("/login", props);
+      // First, get CSRF cookie from Laravel's built-in route
+      await csrfClient.get('/sanctum/csrf-cookie');
       
-      // Store the token in localStorage
-      localStorage.setItem('auth_token', response.data.token);
+      // Then login
+      const response = await axios.post("/login", props);
       
       // Set the user data from login response
       mutate(response.data.user, { revalidate: false });
@@ -174,8 +176,7 @@ export const useAuth = ({
       // Continue with logout even if API call fails
       console.error('Logout API call failed:', error);
     } finally {
-      // Always clear token and redirect
-      localStorage.removeItem('auth_token');
+      // Clear user data and redirect
       mutate(null, { revalidate: false });
       window.location.pathname = "/login";
     }

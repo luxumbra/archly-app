@@ -11,14 +11,14 @@ const useYoreAssetProgress = (assetConfig = {}) => {
     'react-dom': () => window.React,
 
     // API calls
-    'initial-places': () => fetch('/api/places/initial').catch(() => Promise.resolve()),
+    // 'initial-places': () => fetch('/api/places/initial').catch(() => Promise.resolve()),
 
     // Images (only ones you care about)
     'hero-image': () => new Promise(resolve => {
       const img = new Image();
       img.onload = resolve;
       img.onerror = resolve; // Count errors as loaded
-      img.src = '/images/hero-bg.jpg';
+      img.src = '/asets/yore.png';
     }),
 
     // Stylesheets

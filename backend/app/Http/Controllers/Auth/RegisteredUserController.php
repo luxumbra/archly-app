@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\SupabaseService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -13,6 +14,13 @@ use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
 {
+    protected SupabaseService $supabaseService;
+
+    public function __construct(SupabaseService $supabaseService)
+    {
+        $this->supabaseService = $supabaseService;
+    }
+
     /**
      * Handle an incoming registration request.
      *
@@ -34,13 +42,52 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        // Create personal access token for SPA authentication
-        $token = $user->createToken('auth-token')->plainTextToken;
+        // Auto-login the user after registration
+        Auth::login($user);
+
+        // Create corresponding Supabase user profile
+        $this->createSupabaseUserProfile($user);
 
         return response()->json([
             'message' => 'Registration successful',
-            'user' => $user,
-            'token' => $token
+            'user' => $user
         ], 201);
+    }
+
+    /**
+     * Create a corresponding user profile in Supabase
+     */
+    private function createSupabaseUserProfile(User $user): void
+    {
+        try {
+            // Create user mapping and profile in Supabase
+            $supabaseUuid = $this->supabaseService->getOrCreateUserMapping(
+                $user->id,
+                $user->email,
+                $user->name,
+                $user->name
+            );
+            
+            if ($supabaseUuid) {
+                \Log::info('Supabase user profile mapping created on registration', [
+                    'laravel_user_id' => $user->id,
+                    'email' => $user->email,
+                    'name' => $user->name,
+                    'supabase_uuid' => $supabaseUuid
+                ]);
+            } else {
+                \Log::warning('Failed to create Supabase user profile mapping', [
+                    'laravel_user_id' => $user->id,
+                    'email' => $user->email,
+                    'name' => $user->name
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::warning('Failed to create Supabase user profile', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }

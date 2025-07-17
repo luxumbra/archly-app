@@ -21,7 +21,7 @@ interface MapViewProps {
 
 const MapView = ({
   initialQuery = "ancient monuments historical archaeological sites",
-  initialLocation = { latitude: 55.9533, longitude: -3.1883 },
+  initialLocation = { latitude: 51.64586565016349, longitude: -2.32646578269444953 },
 }: MapViewProps) => {
   const [places, setPlaces] = useState<Place[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -29,7 +29,7 @@ const MapView = ({
   const [searchLocation, setSearchLocation] =
     useState<Location>(initialLocation);
   const [mapCenter, setMapCenter] = useState<Location>(initialLocation);
-  const [mapZoom, setMapZoom] = useState<number>(5);
+  const [mapZoom, setMapZoom] = useState<number>(10);
   const [useUserLocation, setUseUserLocation] = useState(false); // Track if user wants to use their location
   const [currentMapCenter, setCurrentMapCenter] =
     useState<Location>(initialLocation);
@@ -131,6 +131,7 @@ const MapView = ({
       const cachedResults = getCachedResults(searchQuery, location, SEARCH_RADIUS);
       if (cachedResults) {
         console.log("Using cached results:", cachedResults.length, "places");
+        console.log(`${API_URI}/places/search?query=${searchQuery}&location=${location.latitude},${location.longitude}&radius=${SEARCH_RADIUS}&fields=places.displayName,places.formattedAddress,places.id,places.location`);
         setPlaces(cachedResults);
         saveMapState(location, mapZoom, cachedResults);
         return;
@@ -469,7 +470,7 @@ const MapView = ({
   const handleClearSearch = useCallback(() => {
     console.log("Clearing text search, reverting to default query");
     setCurrentQuery(initialQuery);
-    
+
     // Use current map center for search with default query
     const searchLocation = userLocation && useUserLocation ? userLocation : currentMapCenter;
     fetchPlaces(searchLocation, initialQuery);

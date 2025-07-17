@@ -24,7 +24,7 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
   onMarkerClick
 }) => {
   console.log('ClusteredMapMarkers: Component render with places:', places?.length || 0)
-  
+
   const router = useRouter()
   const map = useMap()
   const [hoveredPlace, setHoveredPlace] = useState<Place | null>(null)
@@ -34,7 +34,7 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
   // Simple clustering logic based on proximity and zoom level
   const clusteredMarkers = useMemo(() => {
     console.log('ClusteredMapMarkers: Processing places:', places?.length || 0)
-    
+
     if (!places || places.length === 0) {
       console.log('ClusteredMapMarkers: No places to display')
       return []
@@ -43,7 +43,7 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
     // Get current zoom level to adjust clustering radius
     const currentZoom = map?.getZoom() || 10
     console.log('ClusteredMapMarkers: Current zoom level:', currentZoom)
-    
+
     // Adjust clustering radius based on zoom level
     // Higher zoom = smaller radius (less clustering)
     // Lower zoom = larger radius (more clustering)
@@ -55,7 +55,7 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
     } else {
       CLUSTER_RADIUS = 0.2 // ~20km at low zoom
     }
-    
+
     console.log('ClusteredMapMarkers: Using cluster radius:', CLUSTER_RADIUS)
 
     const clusters: ClusterInfo[] = []
@@ -66,10 +66,10 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
 
       const nearbyPlaces = places.filter((otherPlace) => {
         if (processed.has(otherPlace.id) || place.id === otherPlace.id) return false
-        
+
         const latDiff = Math.abs(place.location.latitude - otherPlace.location.latitude)
         const lngDiff = Math.abs(place.location.longitude - otherPlace.location.longitude)
-        
+
         return latDiff < CLUSTER_RADIUS && lngDiff < CLUSTER_RADIUS
       })
 
@@ -102,7 +102,7 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
 
     console.log('ClusteredMapMarkers: Created clusters:', clusters.length)
     return clusters
-  }, [places, map])
+  }, [places, map, map && map.getZoom()])
 
   const handleMarkerClick = (cluster: ClusterInfo) => {
     if (cluster.isCluster) {
@@ -202,7 +202,7 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
     if (clusteredMarkers.length > 0) {
       // Reset animation state
       setAnimateMarkers(false)
-      
+
       // Small delay to ensure markers are rendered, then trigger animation
       const timer = setTimeout(() => {
         setAnimateMarkers(true)
@@ -232,9 +232,9 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
               }
             }}
           >
-            <div 
+            <div
               className={`marker-animation ${animateMarkers ? 'animate-in' : ''}`}
-              style={{ 
+              style={{
                 animationDelay: `${index * 100}ms`,
                 opacity: animateMarkers ? 1 : 0,
                 transform: animateMarkers ? 'scale(1) translateY(0) rotate(0deg)' : 'scale(0) translateY(-30px) rotate(-180deg)',
@@ -247,7 +247,7 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
             </div>
           </AdvancedMarker>
         ))}
-        
+
         {/* Info Window */}
         {hoveredPlace && infoWindowOpen && (
           <MarkerInfoWindow
@@ -266,15 +266,15 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
         <AdvancedMarker
           key={`cluster-${index}`}
           position={{ lat: cluster.lat, lng: cluster.lng }}
-          title={cluster.isCluster 
-            ? `${cluster.places.length} places` 
+          title={cluster.isCluster
+            ? `${cluster.places.length} places`
             : cluster.places[0].displayName?.text || 'Unknown Place'
           }
           onClick={() => handleMarkerClick(cluster)}
         >
-          <div 
+          <div
             className={`marker-animation ${animateMarkers ? 'animate-in' : ''}`}
-            style={{ 
+            style={{
               animationDelay: `${index * 120}ms`,
               opacity: animateMarkers ? 1 : 0,
               transform: animateMarkers ? 'scale(1) translateY(0) rotate(0deg)' : 'scale(0) translateY(-30px) rotate(-180deg)',
@@ -292,7 +292,7 @@ const ClusteredMapMarkers: React.FC<ClusteredMapMarkersProps> = ({
           </div>
         </AdvancedMarker>
       ))}
-      
+
       {/* Info Window */}
       {hoveredPlace && infoWindowOpen && (
         <MarkerInfoWindow

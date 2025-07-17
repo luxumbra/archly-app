@@ -58,6 +58,7 @@ export interface SiteDetailPlace {
   placesData: PlaceData;
   aiData?: string;
   parsedAiData: ParsedAiData;
+  siteType?: string;
 }
 
 export interface PlacesSearchResponse {

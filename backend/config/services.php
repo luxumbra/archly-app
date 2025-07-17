@@ -43,5 +43,9 @@ return [
         'anthropic_api_uri' => env('ANTHROPIC_API_URI', 'https://api.anthropic.com/'),
         'anthropic_api_key' => env('ANTHROPIC_API_KEY'),
         'anthropic_model' => env('ANTHROPIC_MODEL', 'claude-3-5-sonnet-20241022'),
-    ]
+    ],
+    'supabase' => [
+        'url' => env('SUPABASE_URL'),
+        'service_role_key' => env('SUPABASE_SERVICE_ROLE_KEY'),
+    ],
 ];
