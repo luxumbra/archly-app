@@ -3,3 +3,5 @@
 .env.production
 .env.*
 !.env.example
+.netlify
+supabase/.temp 
