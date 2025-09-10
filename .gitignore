@@ -4,4 +4,6 @@
 .env.*
 !.env.example
 .netlify
-supabase/.temp 
+supabase/.temp
+
+certificates
