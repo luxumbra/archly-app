@@ -13,5 +13,5 @@ export default defineConfig({
   adapter: node({
     mode: "standalone",
   }),
-  site: "https://yore.earth",
+  site: process.env.SITE_URL,
 });
