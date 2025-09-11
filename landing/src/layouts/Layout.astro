@@ -1,13 +1,17 @@
 ---
+import {OpenPanelComponent} from '@openpanel/astro';
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Seo from "../components/Seo.astro";
 import "../styles/global.css";
 
+import { constants } from '../constants';
 export interface Props {
   title: string;
   description?: string;
 }
+
+const {OPENPANEL_CLIENT_ID} = constants;
 
 const {
   title,
@@ -25,6 +29,13 @@ const {
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
+    />
+        <OpenPanelComponent
+        apiUrl="https://analytics.api.frst.uk"
+      clientId={OPENPANEL_CLIENT_ID}
+      trackScreenViews={true}
+      trackAttributes={true}
+      trackOutgoingLinks={true}
     />
   </head>
   <body class="font-sans bg-yore-dark text-white overflow-x-hidden">
