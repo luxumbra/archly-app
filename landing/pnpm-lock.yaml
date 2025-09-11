@@ -29,6 +29,9 @@ importers:
       '@marsidev/react-turnstile':
         specifier: ^1.1.0
         version: 1.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@openpanel/astro':
+        specifier: ^1.0.1
+        version: 1.0.1(astro@5.11.0(@netlify/blobs@8.2.0)(@types/node@24.0.10)(jiti@2.4.2)(rollup@4.44.2)(terser@5.43.1)(typescript@5.8.3)(yaml@2.8.0))
       '@react-email/components':
         specifier: ^0.2.0
         version: 0.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -887,6 +890,17 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@openpanel/astro@1.0.1':
+    resolution: {integrity: sha512-PLSOJFj4RoFbQPZXBwJNsaqprnrjq5Hj1x6oY1a1IJpWSqFqO3Wa1OSMsLh2G2QXAowsg+cfiu7Mp6h/kK1tow==}
+    peerDependencies:
+      astro: ^4.0.0 || ^5.0.0
+
+  '@openpanel/sdk@1.0.0':
+    resolution: {integrity: sha512-FNmmfjdXoC/VHEjA+WkrQ4lyM5lxEmV7xDd57uj4E+lIS0sU3DLG2mV/dpS8AscnZbUvuMn3kPhiLCqYzuv/gg==}
+
+  '@openpanel/web@1.0.1':
+    resolution: {integrity: sha512-cVZ7Kr9SicczJ/RDIfEtZs8+1iGDzwkabVA/j3NqSl8VSucsC8m1+LVbjmCDzCJNnK4yVn6tEcc9PJRi2rtllw==}
 
   '@oslojs/encoding@1.1.0':
     resolution: {integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==}
@@ -5651,6 +5665,17 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
+
+  '@openpanel/astro@1.0.1(astro@5.11.0(@netlify/blobs@8.2.0)(@types/node@24.0.10)(jiti@2.4.2)(rollup@4.44.2)(terser@5.43.1)(typescript@5.8.3)(yaml@2.8.0))':
+    dependencies:
+      '@openpanel/web': 1.0.1
+      astro: 5.11.0(@netlify/blobs@8.2.0)(@types/node@24.0.10)(jiti@2.4.2)(rollup@4.44.2)(terser@5.43.1)(typescript@5.8.3)(yaml@2.8.0)
+
+  '@openpanel/sdk@1.0.0': {}
+
+  '@openpanel/web@1.0.1':
+    dependencies:
+      '@openpanel/sdk': 1.0.0
 
   '@oslojs/encoding@1.1.0': {}
 
