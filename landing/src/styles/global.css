@@ -4,31 +4,35 @@
 
 @layer base {
   h1 {
-    @apply text-3xl lg:text-5xl font-serif font-normal text-white mb-6;
+    @apply text-4xl lg:text-5xl font-serif font-normal text-white mb-6;
   }
   h2 {
-    @apply text-4xl lg:text-6xl  font-serif text-white mb-6;
+    @apply text-4xl sm:text-6xl  font-serif text-white mb-6;
   }
   h3 {
     @apply text-4xl lg:text-7xl font-serif font-normal text-white mb-6 lg:mb-8;
   }
   h4 {
-    @apply text-lg lg:text-xl font-semibold mb-1 text-white;
+    @apply text-xl lg:text-2xl font-semibold mb-1 text-white;
   }
   h5 {
     @apply text-lg lg:text-xl font-semibold mb-1 text-white;
   }
   p {
-    @apply text-base font-sans font-thin text-white mb-4;
+    @apply text-lg font-sans text-gray-300 mb-4;
+  }
+
+  h1 + p {
+    @apply text-xl sm:text-2xl font-light leading-relaxed ;
   }
 
   h2 + p,
   h2 + div > p:first-of-type  {
-    @apply text-lg lg:text-2xl leading-relaxed font-light;
+    @apply text-2xl sm:text-2xl xl:text-3xl leading-relaxed font-light mb-8;
   }
 
   h3 + p {
-    @apply text-lg lg:text-xl text-gray-300 font-light leading-normal lg:leading-relaxed mb-12;
+    @apply text-xl lg:text-xl text-gray-300 font-light leading-normal lg:leading-relaxed mb-12;
   }
   .box-test > * {
     @apply outline outline-1 outline-red-500;

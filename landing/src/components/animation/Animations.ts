@@ -53,7 +53,7 @@ function AnimateFeatures(): void {
         scrollTrigger: {
           trigger: feature,
           start: "top 80%",
-          end: "bottom 50%",
+          end: "bottom 70%",
           scrub: true,
         },
         opacity: 0,

@@ -11,7 +11,7 @@ import { AnimateAppMockup, AnimateTitles } from "./animation/Animations";
 
 <section
   id="what-is-yore"
-  class="relative flex items-center min-h-screen py-32 overflow-hidden bg-yore-dark shadow-xl shadow-black/80"
+  class="relative flex items-center min-h-screen py-16 lg:py-32 overflow-hidden bg-yore-dark shadow-xl shadow-black/80"
 >
   <!-- Background Map -->
   <div class="absolute inset-0 bg-center bg-cover">
@@ -33,34 +33,34 @@ import { AnimateAppMockup, AnimateTitles } from "./animation/Animations";
         <p>
           Yore is your digital companion for uncovering history.
         </p>
-        <ul class="space-y-4 my-4 ">
-          <li class="flex items-start gap-3">
-            <ArIcon class="w-6 h-6 mt-1 flex-shrink-0 fill-current text-yore-explore" />
+        <ul class="my-4 sm:my-8 flex flex-col gap-4">
+          <li class="flex sm:items-center gap-3 text-xl">
+            <ArIcon class="w-8 h-8 mt-1 flex-shrink-0 fill-current text-yore-explore" />
             <span>Instantly access expert insights with our "Yore-acle" AI.</span>
           </li>
-          <li class="flex items-start gap-3">
-            <JournalIcon class="w-6 h-6 mt-1 flex-shrink-0 fill-current text-yore-log" />
+          <li class="flex sm:items-center gap-3 text-xl">
+            <JournalIcon class="w-8 h-8 mt-1 flex-shrink-0 fill-current text-yore-log" />
             <span>Record your journeys with photos, notes, and locations.</span>
           </li>
-          <li class="flex items-start gap-3">
-            <CommunityIcon class="w-6 h-6 mt-1 flex-shrink-0 fill-current text-yore-social" />
+          <li class="flex sm:items-center gap-3 text-xl">
+            <CommunityIcon class="w-8 h-8 mt-1 flex-shrink-0 fill-current text-yore-social" />
             <span>Connect with a global network of passionate explorers.</span>
           </li>
-          <li class="flex items-start gap-3">
-            <AchievementsIcon class="w-6 h-6 mt-1 flex-shrink-0 fill-current text-yore-discover" />
+          <li class="flex items-start gap-3 text-xl">
+            <AchievementsIcon class="w-8 h-8 mt-1 flex-shrink-0 !fill-yore-discover text-yore-discover" />
             <span>Earn recognition for your discoveries—seamlessly, securely, and without technical barriers.</span>
           </li>
         </ul>
-        <p>
+        <p class="mt-8 text-lg">
           Whether you're a seasoned archaeologist or just love a good story, Yore makes every adventure meaningful.
         </p>
       </div>
-      <div class="flex items-center justify-center gap-4 mx-auto sm:flex-row max-w-48 lg:max-w-6xl mt-12 ">
+      <div class="flex items-center justify-center gap-4 mx-auto sm:flex-row max-w-96 lg:max-w-6xl mt-12 ">
         {/* CTA Buttons - Features (links to next section) */}
-        <a href="#features" class="w-full px-8 py-3 font-semibold text-white transition-colors rounded-lg bg-yore-primary hover:bg-yore-primary/90 lg:w-auto">
+        <a href="#features" class="w-full px-8 py-3 font-semibold text-white transition-colors rounded-lg bg-yore-primary hover:bg-yore-primary/90 lg:w-auto text-center">
           Features
         </a>
-        <a href="#signup" class="w-full px-8 py-3 font-semibold text-white transition-colors bg-transparent border-2 border-white rounded-lg hover:bg-white hover:text-gray-900 lg:w-auto">
+        <a href="#signup" class="w-full px-8 py-3 font-semibold text-white transition-colors bg-transparent border-2 border-white rounded-lg hover:bg-white hover:text-gray-900 lg:w-auto text-center">
           Sign up
         </a>
       </div>
