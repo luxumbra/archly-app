@@ -85,20 +85,21 @@ const currentPath = Astro.url.pathname;
   <!-- Mobile menu -->
   <div
     id="mobile-menu"
-    class="fixed inset-0 z-0 transition-transform duration-300 ease-in-out transform translate-x-full bg-gray-800 md:hidden"
+    class="fixed inset-0 z-0 transition-transform duration-300 ease-in-out transform translate-x-full bg-gray-800/10 md:hidden"
   >
     <div
-      class="flex flex-col items-center justify-center w-screen h-screen px-6 space-y-8 bg-gray-500"
+      class="flex flex-col items-center justify-center w-screen h-screen px-6 space-y-8 bg-discover/30 backdrop-blur-xl"
     >
-      <a href="#top" class="flex items-center">
-        <img src="/yore-logo.png" alt="Yore" class="w-auto h-16" />
+      <a href="#home" class="flex items-center">
+        <img src="/yore-logo.png" alt="Yore" class="w-auto h-24" />
       </a>
       <ul
-        class="flex justify-between w-full gap-6 md:space-x-6 md:justify-center md:gap-12 fouc"
+        class="list-none flex flex-col items-center md:flex-row justify-start w-full gap-8 md:space-x-6 md:justify-center md:gap-12 fouc"
       >
         {
           items.map((item: NavItem) => {
             const isInternalActive =
+            item.href === "#home" && null; // Ignore Home link in the header
               item.type === "internal" && item.href === currentPath;
 
             // Smart href builder:
@@ -106,18 +107,17 @@ const currentPath = Astro.url.pathname;
             const fullHref =
               item.type === "section" ? `${basePath}${item.href}` : item.href;
 
-            item.href === "#home" && null; // Ignore Home link in the header
             return (
-              <li class="flex-1 md:flex-none">
+              <li class="flex">
                 <a
                   href={fullHref}
-                  class={`flex flex-col items-center gap-1 text-[var(--white-icon)] transition-colors text-xs md:text-base relative group ${isInternalActive ? "active" : ""}`}
+                  class={`flex flex-row items-center gap-1 text-[var(--white-icon)] transition-colors text-lg relative group ${isInternalActive ? "active" : ""}`}
                 >
                   {/* <div class="absolute -left-4 top-1/2 w-2 h-2 rounded-full transition-all duration-300 bg-[#A9FF5B] nav-indicator hidden md:block" />
                   <span class="flex items-center justify-center w-6 h-6 md:hidden">
                     <fragment set:html={item.icon} />
                   </span> */}
-                  <span class="hidden md:inline-block">{item.label}</span>
+                  <span class="inline-block">{item.label}</span>
                 </a>
               </li>
             );
