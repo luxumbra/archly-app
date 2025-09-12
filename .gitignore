@@ -8,3 +8,4 @@ supabase/.temp
 
 certificates
 logs
+*.zip
